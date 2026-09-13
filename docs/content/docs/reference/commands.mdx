@@ -1,0 +1,155 @@
+---
+title: Command Reference
+description: Every bake command and its important flags.
+---
+
+## Global flags
+
+| Flag | Description |
+|------|-------------|
+| `--ci` | Plain, color-free output; no spinners; no interactive prompts |
+| `--json` | Structured JSON output; no decorative text |
+| `--help` | Show help for any command |
+
+## Commands
+
+### bake login
+
+Manage local keypair.
+
+```bash
+bake login                    # Create or link local wallet
+bake login --wallet nightly   # Use Nightly Connect (high-stakes only)
+```
+
+### bake use
+
+Switch active cluster.
+
+```bash
+bake use cookie               # Cookie Chain (default)
+bake use mainnet              # Solana mainnet
+bake use devnet               # Solana devnet
+bake use http://localhost:8899  # Custom RPC
+```
+
+### bake whoami
+
+Show active wallet(s) and cluster.
+
+```bash
+bake whoami
+```
+
+### bake init
+
+Scaffold a new Anchor project.
+
+```bash
+bake init my-program          # Create new project
+bake init --no-skill          # Skip @cookiechain/skill install
+```
+
+### bake deploy
+
+Build, deploy, hash, and register on-chain.
+
+```bash
+bake deploy                   # Full pipeline
+bake deploy --require-audit   # Gate on clean audit
+bake deploy --yes             # Skip confirmation
+```
+
+### bake audit
+
+Static analysis via Radar.
+
+```bash
+bake audit                    # Run Radar analysis
+bake audit /path/to/project   # Analyze specific project
+```
+
+### bake rollback
+
+Rebuild and redeploy a previous entry.
+
+```bash
+bake rollback                 # Interactive selection
+bake rollback --to 3          # Rollback to entry #3
+bake rollback --require-audit # Gate on clean audit
+```
+
+### bake logs
+
+View program logs.
+
+```bash
+bake logs                     # Recent logs
+bake logs -f                  # Live streaming
+bake logs <programId>         # Specific program
+```
+
+### bake prove
+
+Verify on-chain bytecode.
+
+```bash
+bake prove                    # Level 1: hash check
+bake prove --rebuild          # Level 2: full reproducibility
+bake prove --to 2             # Verify specific entry
+```
+
+### bake diff
+
+Compare deploys.
+
+```bash
+bake diff 3                   # Source diff since entry #3
+bake diff 3 --rebuild         # Include bytecode diff
+```
+
+### bake decode
+
+Decode transactions/accounts.
+
+```bash
+bake decode <signature>       # Decode transaction
+bake decode --account <addr>  # Decode account
+bake decode --log <line>      # Decode log line
+```
+
+### bake stats
+
+Program activity metrics.
+
+```bash
+bake stats                    # Current project
+bake stats <programId>        # Specific program
+```
+
+### bake fork
+
+Clone program into local validator.
+
+```bash
+bake fork <programId>                    # Clone from mainnet
+bake fork <programId> --source cookie    # Clone from Cookie Chain
+bake fork <programId> --fetch-program-accounts  # Include accounts
+```
+
+### bake doctor
+
+Environment health check.
+
+```bash
+bake doctor
+```
+
+### bake mcp
+
+Start MCP server for AI agents.
+
+```bash
+bake mcp                      # Read-only mode
+bake mcp --policy policy.json # With write access
+```

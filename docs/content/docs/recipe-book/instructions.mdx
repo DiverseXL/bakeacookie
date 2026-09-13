@@ -1,0 +1,66 @@
+---
+title: Instructions
+description: Recipe Book program instructions.
+---
+
+## initialize_recipe_book
+
+Creates a new RecipeBook for a target program.
+
+### Accounts
+
+| Account | Writable | Signer | Description |
+|---------|----------|--------|-------------|
+| `authority` | ✅ | ✅ | The authority for this RecipeBook |
+| `recipe_book` | ✅ | ❌ | PDA to be created |
+| `system_program` | ❌ | ❌ | System program |
+
+### Args
+
+| Arg | Type | Description |
+|-----|------|-------------|
+| `target_program_id` | `pubkey` | The program to track |
+
+### Behavior
+
+- Creates a new RecipeBook PDA
+- Sets authority to the signer
+- Fails with `RecipeBookAlreadyExists` if one already exists for this program
+
+## register_deploy
+
+Records a new deploy entry in the RecipeBook.
+
+### Accounts
+
+| Account | Writable | Signer | Description |
+|---------|----------|--------|-------------|
+| `deployer` | ✅ | ✅ | The wallet that deployed |
+| `recipe_book` | ✅ | ❌ | The RecipeBook PDA |
+| `authority` | ❌ | ❌ | Must match RecipeBook.authority |
+| `entry` | ✅ | ❌ | PDA to be created |
+| `system_program` | ❌ | ❌ | System program |
+
+### Args
+
+| Arg | Type | Description |
+|-----|------|-------------|
+| `repo` | `string` | Git remote URL or short name |
+| `commit` | `string` | Git commit SHA |
+| `build_hash` | `[u8; 32]` | SHA-256 of compiled binary |
+| `buffer` | `pubkey` | Buffer program account |
+
+### Behavior
+
+- Creates a new Entry PDA
+- Increments RecipeBook.entry_count
+- Fails with `Unauthorized` if deployer ≠ authority
+- Fails with `StringTooLong` if strings exceed max length
+
+## Error codes
+
+| Code | Name | Description |
+|------|------|-------------|
+| 6000 | `RecipeBookAlreadyExists` | A RecipeBook already exists for this target program |
+| 6001 | `Unauthorized` | Signer is not the authority of this RecipeBook |
+| 6002 | `StringTooLong` | String exceeds maximum allowed length |

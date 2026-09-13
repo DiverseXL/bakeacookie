@@ -1,0 +1,41 @@
+---
+title: Welcome
+description: The Vercel CLI for Cookie Chain — build, deploy, verify, and roll back Anchor programs in seconds.
+---
+
+## What is bake?
+
+**bake** is a CLI developer tool for Cookie Chain — a fast, cheap, Solana-compatible SVM blockchain. It's positioned as "the Vercel CLI for SVM": one-command build → deploy → verify → rollback, with every deploy recorded permanently on-chain via a small Anchor program called the **Recipe Book**.
+
+```bash
+npm install -g bakeacookie
+bake --help
+```
+
+## Who is bake for?
+
+- **Cookie Chain developers** who want a better deploy experience than raw `solana deploy`
+- **Teams** who need on-chain deploy history for compliance or debugging
+- **AI agents** who need to deploy programs via MCP (Model Context Protocol)
+- **Security-conscious developers** who want audit-gated deploys via Radar
+
+## 30-second pitch
+
+Cookie Chain's economics make things possible that are impractical anywhere else — like a rollback that costs cents, or a permanent, on-chain, queryable ledger of every deploy you've ever made. bake closes the tooling gap that the ecosystem's own roadmap lists as future work.
+
+## What makes bake different?
+
+| Feature | bake | Raw Solana CLI |
+|---------|------|----------------|
+| On-chain deploy history | ✅ Recipe Book | ❌ |
+| One-command rollback | ✅ `bake rollback` | ❌ Manual re-deploy |
+| Cryptographic proof | ✅ `bake prove` | ❌ |
+| Windows support | ✅ Auto-WSL relay | ❌ |
+| AI agent support | ✅ `bake mcp` | ❌ |
+| Security audit gate | ✅ `bake deploy --require-audit` | ❌ |
+
+## Next steps
+
+- **[Install](/docs/get-started/install)** — get bake on your machine
+- **[Quickstart](/docs/get-started/quickstart)** — deploy your first program in 60 seconds
+- **[First Deploy](/docs/get-started/first-deploy)** — step-by-step walkthrough

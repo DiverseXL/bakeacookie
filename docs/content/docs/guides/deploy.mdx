@@ -1,0 +1,86 @@
+---
+title: Deploy Pipeline
+description: What bake deploy does under the hood.
+---
+
+## Overview
+
+```bash
+bake deploy
+```
+
+`bake deploy` runs a single, shared pipeline that handles everything from build to on-chain registration.
+
+## The pipeline
+
+```
+┌─────────────┐    ┌─────────────┐    ┌─────────────┐    ┌─────────────┐
+│   Build     │ →  │   Deploy    │ →  │    Hash     │ →  │  Register   │
+│ anchor build│    │ solana deploy│   │ SHA-256 .so │    │ Recipe Book │
+└─────────────┘    └─────────────┘    └─────────────┘    └─────────────┘
+```
+
+### 1. Build
+
+```bash
+anchor build --arch v0 --tools-version v1.57
+```
+
+- `--arch v0` targets the older, universally compatible instruction set (SBPF v3 fails on local validators)
+- `--tools-version v1.57` pins the platform-tools version for reproducibility
+
+### 2. Deploy
+
+Uploads the compiled `.so` binary to Cookie Chain via the Solana CLI.
+
+### 3. Hash
+
+Computes SHA-256 of the compiled binary, skipping the ProgramData account's header and correctly parsing the ELF64 header to determine exact binary length.
+
+### 4. Register
+
+Writes a permanent entry to the Recipe Book on-chain:
+
+```
+register_deploy(repo, commit, buildHash, buffer)
+```
+
+This creates an immutable record with:
+- Git repository URL
+- Commit SHA
+- Build hash (SHA-256 of binary)
+- Buffer account address
+- Deployer wallet
+- Timestamp
+
+## Flags
+
+| Flag | Description |
+|------|-------------|
+| `--require-audit` | Gate deploy on clean `bake audit` |
+| `--yes` / `-y` | Skip confirmation prompt |
+| `--ci` | Plain output, no spinners |
+| `--json` | Structured JSON output |
+
+## Audit gating
+
+With `--require-audit`, bake runs Radar before deploying and refuses to ship if any critical or high findings exist:
+
+```bash
+bake deploy --require-audit
+```
+
+See [Audit with Radar](/docs/guides/audit) for details.
+
+## Error handling
+
+If any step fails, bake:
+1. Shows a friendly error message
+2. Does NOT register a partial deploy in the Recipe Book
+3. Preserves your working directory state
+
+## What's NOT baked
+
+- bake never modifies your source code
+- bake never commits to git
+- bake never signs transactions that aren't deploy-related

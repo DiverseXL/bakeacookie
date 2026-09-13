@@ -1,0 +1,66 @@
+---
+title: Prove
+description: Verify on-chain bytecode matches your Recipe Book entry.
+---
+
+## Overview
+
+```bash
+bake prove
+```
+
+`bake prove` verifies that what's actually running on-chain matches what the Recipe Book says was deployed. This is cryptographic proof, not just trust.
+
+## Level 1: Hash check (default)
+
+```bash
+bake prove
+```
+
+1. Fetches on-chain ProgramData bytes
+2. Parses the ELF64 header to determine exact binary length
+3. Computes SHA-256 of the binary (skipping account header)
+4. Compares against the recorded build hash in the Recipe Book
+
+```
+Entry #0
+Recorded hash: c1367bd7f4e02793b55...
+On-chain hash: c1367bd7f4e02793b55...
+✔ On-chain bytecode matches Recipe Book entry #0
+```
+
+## Level 2: Full reproducibility (`--rebuild`)
+
+```bash
+bake prove --rebuild
+```
+
+This goes further:
+1. Checks out the exact commit from the Recipe Book entry
+2. Rebuilds the program from source
+3. Hashes the rebuilt binary
+4. Compares against the on-chain binary
+
+This proves that the source code at that commit produces the exact binary running on-chain.
+
+<callout type="warning">
+`--rebuild` modifies your git state (checks out a historical commit). It always restores your original state via try/finally, but avoid running it on a dirty working tree.
+</callout>
+
+## What it checks
+
+| Check | Level 1 | Level 2 (`--rebuild`) |
+|-------|---------|----------------------|
+| On-chain binary matches Recipe Book | ✅ | ✅ |
+| Source code produces that binary | ❌ | ✅ |
+| Modifies git state | No | Yes (restored) |
+
+## Why this matters
+
+Without `bake prove`, you're trusting that what you deployed is what's running. With it, you have cryptographic proof that the on-chain binary matches your recorded deploy — and optionally that the source code produces that binary.
+
+## Implementation note
+
+The bytecode verification logic skips the ProgramData account's header, correctly parses the ELF64 header to determine exact binary length, and hashes with SHA-256. This exact computation went through two real bugs during development before landing on the correct approach.
+
+See [Verifying Bytecode](/docs/recipe-book/verifying-bytecode) for technical details.

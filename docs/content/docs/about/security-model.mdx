@@ -1,0 +1,67 @@
+---
+title: Security Model
+description: How bake handles write access and security.
+---
+
+## Design principle
+
+bake is a CLI that deploys real programs to real blockchains. The security model is designed around one principle: **an agent cannot be tricked into calling a tool it does not know exists.**
+
+## MCP safety model
+
+### Read-only by default
+
+`bake mcp` starts in **READ-ONLY mode**. Write tools are **not registered at all** — not "registered but blocked."
+
+### Policy-gated writes
+
+To enable writes, create a policy file:
+
+```json
+{
+  "allowWrites": true,
+  "maxDeploysPerSession": 5,
+  "requireConfirmation": true
+}
+```
+
+### Confirmation flow
+
+When `requireConfirmation: true`:
+1. Agent calls `bake_deploy`
+2. Server returns preview + `confirmationToken`
+3. Agent (or human) calls `bake_confirm_action` with token
+4. Server executes
+
+A real deploy cannot complete in a single unsupervised tool call.
+
+### Session limits
+
+`maxDeploysPerSession` caps writes per MCP server process. Counter resets on restart.
+
+### Audit logging
+
+Every write attempt is logged to stderr with ISO timestamp.
+
+## Audit gating
+
+```bash
+bake deploy --require-audit
+```
+
+Runs Radar (Auditware's static analyzer) before deploying. Refuses to ship critical/high findings.
+
+There is deliberately **no `--ignore-audit` override**.
+
+## Radar
+
+bake implements no security heuristics of its own. All findings are Radar's, labelled "powered by Radar."
+
+See [Audit with Radar](/docs/guides/audit) for details.
+
+## What bake never does
+
+- ❌ Never signs transactions that aren't deploy-related
+- ❌ Never exports private keys
+- ❌ Never shares sessions with the dashboard
+- ❌ Never auto-installs security scanners silently

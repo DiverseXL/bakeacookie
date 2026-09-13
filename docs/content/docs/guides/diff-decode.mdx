@@ -1,0 +1,58 @@
+---
+title: Diff & Decode
+description: Compare deploys and decode transactions/accounts.
+---
+
+## Source diff
+
+```bash
+bake diff <entry>
+```
+
+Shows what's changed (source code) since a given Recipe Book entry.
+
+### With bytecode diff
+
+```bash
+bake diff <entry> --rebuild
+```
+
+Rebuilds the binary from the historical commit and compares bytecode. This shows both source and binary differences.
+
+## Decode transactions
+
+```bash
+bake decode <transactionSignature>
+```
+
+Decodes a transaction using the program's IDL.
+
+### Decode accounts
+
+```bash
+bake decode --account <accountAddress>
+```
+
+Decodes an account's data using the program's IDL.
+
+### Decode logs
+
+```bash
+bake decode --log <logLine>
+```
+
+Decodes an Anchor event log line.
+
+## IDL resolution
+
+bake automatically resolves the IDL from:
+1. The current project's `target/idl/` directory
+2. The built-in IDL registry
+
+For ad-hoc decoding:
+
+```bash
+bake decode <sig> --idl /path/to/program.json
+```
+
+See [IDL Notes](/docs/reference/idl-notes) for details.

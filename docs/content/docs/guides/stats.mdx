@@ -1,0 +1,66 @@
+---
+title: Stats
+description: Program activity metrics and what they measure.
+---
+
+## Overview
+
+```bash
+bake stats <programId>
+```
+
+Shows program activity metrics derived from on-chain data.
+
+## What it measures
+
+| Metric | Source | Description |
+|--------|--------|-------------|
+| Invocations | RPC `getSignaturesForAddress` | Total transaction count |
+| Error rate | RPC `getTransaction` | Percentage of failed transactions |
+| Unique signers | RPC `getTransaction` | Distinct wallet addresses |
+| CU consumed | RPC `getTransaction` | Compute unit usage |
+| Network context | CookieScan REST | Price, market data |
+
+## What it does NOT measure
+
+<callout type="warning">
+CookieScan has NO program-invocation-analytics endpoint. Program stats are computed from standard Cookie Chain RPC calls, with CookieScan's REST API only supplying supplementary network/price context.
+</callout>
+
+- ❌ Invocation counts by instruction type
+- ❌ Error rates by error code
+- ❌ CU breakdown by instruction
+- ❌ Historical trends
+
+These would require chain-wide indexing infrastructure beyond a CLI's reasonable scope.
+
+## Usage
+
+```bash
+# Current project's program
+bake stats
+
+# Specific program
+bake stats 56Vj61zFW4hHV6wdjnisrHtVwWDqyjixjpBgnoRJvzxL
+```
+
+## Output
+
+```
+Program: 56Vj61zFW4hHV6wdjnisrHtVwWDqyjixjpBgnoRJvzxL
+
+  Invocations: 1,247
+  Error rate: 2.1%
+  Unique signers: 89
+  Avg CU: 45,230
+
+  Network: Cookie Chain
+  COOK price: $0.0042
+```
+
+## Flags
+
+| Flag | Description |
+|------|-------------|
+| `--ci` | Plain output |
+| `--json` | Structured JSON |

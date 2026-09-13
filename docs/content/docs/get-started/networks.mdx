@@ -1,0 +1,68 @@
+---
+title: Networks & Clusters
+description: Switch between Cookie Chain, Solana mainnet, devnet, and local validators.
+---
+
+## Cluster switching
+
+```bash
+bake use <cluster|url>
+```
+
+### Built-in presets
+
+| Command | Cluster | RPC |
+|---------|---------|-----|
+| `bake use cookie` | Cookie Chain | `https://rpc.cookiescan.io` |
+| `bake use mainnet` | Solana Mainnet | `https://api.mainnet-beta.solana.com` |
+| `bake use devnet` | Solana Devnet | `https://api.devnet.solana.com` |
+
+### Custom RPC URL
+
+```bash
+bake use https://my-rpc.example.com
+```
+
+Any valid Solana RPC URL works.
+
+### Local validator
+
+```bash
+bake use http://localhost:8899
+```
+
+Point at a local `solana-test-validator` instance.
+
+## Check current cluster
+
+```bash
+bake whoami
+```
+
+Shows your active wallet(s) and the current cluster.
+
+## Cookie Chain specifics
+
+Cookie Chain is a fast, cheap, community-owned SVM blockchain:
+- **Finality**: Sub-second
+- **Cost**: Deploys cost pennies
+- **RPC**: `https://rpc.cookiescan.io` (default)
+
+bake is designed around Cookie Chain's economics — rollbacks cost cents, permanent on-chain history is practical.
+
+## Multi-cluster support
+
+bake's architecture is chain-agnostic. The full pipeline (deploy, prove, logs, stats) has been tested end-to-end on Solana devnet with zero code changes. Cookie Chain remains the primary, flagship target.
+
+## Configuration
+
+Cluster settings are stored in `~/.bake/config.json`:
+
+```json
+{
+  "activeCluster": "cookie",
+  "walletPath": "~/.config/solana/id.json"
+}
+```
+
+See [Clusters & Config](/docs/reference/clusters-config) for details.

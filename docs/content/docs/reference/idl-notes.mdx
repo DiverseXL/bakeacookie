@@ -1,0 +1,64 @@
+---
+title: IDL Notes
+description: IDL sources, hand-written vs auto-generated, and usage.
+---
+
+## Two IDL sources
+
+bake has two independent, both-valid IDL sources:
+
+### Auto-generated
+
+Location: `anchor/target/idl/recipe_book.json`
+
+Produced by `anchor build`. This is the standard Anchor workflow.
+
+### Hand-written
+
+Location: `src/idl/recipe_book.json`
+
+Written and live-validated against the deployed program when auto-generation was temporarily broken during development.
+
+## Which one to use
+
+Both are proven correct via live on-chain calls. The hand-written one is currently used by `RealRecipeBookClient` because:
+- It's the durable fallback if toolchain issues break auto-generation
+- It was validated with real `initialize_recipe_book` + `register_deploy` calls
+
+## Do not delete either
+
+<callout type="warning">
+Do not delete the hand-written IDL — it's the fallback if auto-generation breaks again. If you switch to the auto-generated one, validate it the same rigorous way first.
+</callout>
+
+## IDL structure
+
+```json
+{
+  "address": "56Vj61zFW4hHV6wdjnisrHtVwWDqyjixjpBgnoRJvzxL",
+  "metadata": {
+    "name": "recipe_book",
+    "version": "0.1.0",
+    "spec": "0.1.0"
+  },
+  "instructions": [...],
+  "accounts": [...],
+  "errors": [...],
+  "types": [...]
+}
+```
+
+## Dashboard IDL
+
+The dashboard (`bakeacookie`) has its own copy at `lib/idl/recipe_book.json` — also hand-verified. If the on-chain program changes, update this by copying from the CLI repo (the CLI repo is the source of truth).
+
+## Anchor build flags
+
+```bash
+anchor build --arch v0 --tools-version v1.57
+```
+
+- `--arch v0` — targets older, compatible instruction set (required for local validator)
+- `--tools-version v1.57` — pins platform-tools version for reproducibility
+
+`--no-idl` is **no longer needed** — IDL auto-generation works correctly with the above flags.

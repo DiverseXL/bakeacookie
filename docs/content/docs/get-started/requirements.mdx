@@ -1,0 +1,73 @@
+---
+title: Requirements
+description: System requirements for each bake command.
+---
+
+## By use case
+
+### Read-only commands (Node.js only)
+
+These commands work with just Node.js installed:
+
+- `bake login` — local keypair management
+- `bake use` — switch clusters
+- `bake whoami` — show active wallet(s) and cluster
+- `bake stats` — program activity stats
+- `bake logs` — view program logs
+- `bake decode` — decode transactions/accounts
+
+**Requirements:**
+- Node.js ≥ 18
+- Network access to Cookie Chain RPC
+
+### Build & deploy commands
+
+These commands require the full Solana/Anchor toolchain:
+
+- `bake init` — scaffold new Anchor project
+- `bake deploy` — build, deploy, and register on-chain
+- `bake rollback` — rebuild and redeploy a previous entry
+- `bake prove --rebuild` — full reproducibility proof
+
+**Requirements:**
+- Node.js ≥ 18
+- Rust (via rustup)
+- Solana CLI (Agave)
+- Anchor CLI
+- Git
+
+### Audit commands
+
+- `bake audit` — static analysis via Radar
+- `bake deploy --require-audit` — deploy gated on clean audit
+
+**Requirements:**
+- All build requirements above
+- Radar (`curl -L https://raw.githubusercontent.com/auditware/radar/main/install-radar.sh | bash`)
+- Docker (running)
+
+### Fork commands
+
+- `bake fork` — clone a program into local validator
+
+**Requirements:**
+- Node.js ≥ 18
+- Solana CLI
+
+## Windows-specific
+
+On Windows, bake auto-relays Anchor/Solana commands through WSL. You need:
+
+- Windows 10/11 with WSL 2 enabled
+- Ubuntu distribution in WSL
+- Rust, Solana CLI, and Anchor installed **inside WSL** (not on Windows)
+
+See [Windows & WSL Setup](/docs/get-started/windows) for step-by-step instructions.
+
+## Checking your environment
+
+```bash
+bake doctor
+```
+
+This runs a comprehensive check of your environment and reports pass/warn/fail for each requirement.

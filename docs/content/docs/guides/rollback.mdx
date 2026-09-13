@@ -1,0 +1,78 @@
+---
+title: Rollback Safely
+description: Revert to a previous deploy in one command.
+---
+
+## Overview
+
+```bash
+bake rollback
+```
+
+`bake rollback` rebuilds and redeploys a previous Recipe Book entry. It's designed to be safe — your working directory is never left in a broken state.
+
+## How it works
+
+1. **Reads Recipe Book** — finds all deploy entries for your program
+2. **Picks entry** — interactive selection (or `bake rollback --to <entry>`)
+3. **Checks out commit** — `git checkout <commit-sha>`
+4. **Rebuilds** — `anchor build --arch v0 --tools-version v1.57`
+5. **Deploys** — redeploys the binary
+6. **Registers** — creates a new Recipe Book entry marking the rollback
+7. **Restores** — returns to your original branch/commit
+
+## Safety guarantees
+
+- **Git state always restored** — even if build/deploy fails mid-operation
+- **try/finally block** — the restore runs in a `finally` block, guaranteed to execute
+- **Tested against deliberate failures** — the restore was verified by intentionally breaking builds mid-rollback
+
+## Usage
+
+### Interactive selection
+
+```bash
+bake rollback
+```
+
+Shows a list of Recipe Book entries and lets you pick one.
+
+### Specific entry
+
+```bash
+bake rollback --to 3
+```
+
+Rollback to entry #3 directly.
+
+### With audit gate
+
+```bash
+bake rollback --require-audit
+```
+
+Runs Radar before rolling back.
+
+## What gets rolled back
+
+- The compiled binary (rebuilt from the historical commit)
+- The on-chain program account
+
+What does NOT change:
+- Your git history (a new entry is created, not overwritten)
+- Your working directory (restored to original state)
+
+## Example output
+
+```
+Found 2 deploy(s) in Recipe Book
+Checking out 81445ce8
+Building recipe_book (anchor build)
+Deploying recipe_book to cookie
+Registered deploy in Recipe Book (entry #2)
+Restoring original git state
+✔ Restored to master
+
+Rolled back to: #1 (81445ce8)
+New entry: #2
+```

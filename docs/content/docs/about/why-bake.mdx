@@ -1,0 +1,43 @@
+---
+title: Why bake
+description: The problem bake solves on Cookie Chain.
+---
+
+## The problem
+
+Cookie Chain is a fast, cheap, community-owned SVM blockchain — programs deploy for pennies with sub-second finality. But developer tooling on Cookie Chain today is almost entirely vanilla Solana CLI pointed at a different RPC endpoint.
+
+There's:
+- ❌ No deployment orchestration
+- ❌ No on-chain deploy history
+- ❌ No casual rollback
+- ❌ No security-gated deploy flow
+
+These gaps are listed as future work on Cookie Chain's own roadmap.
+
+## How bake closes the gap
+
+Every command is designed around one idea: Cookie Chain's economics make things possible that are impractical anywhere else.
+
+- **Rollback that costs cents** — `bake rollback` rebuilds and redeploys a previous commit
+- **Permanent on-chain history** — every deploy registers in the Recipe Book
+- **Cryptographic proof** — `bake prove` verifies on-chain binary matches your record
+- **Agent-native** — `bake mcp` exposes capabilities to AI agents with safety-first design
+
+## What makes bake different
+
+| Feature | bake | Raw Solana CLI |
+|---------|------|----------------|
+| On-chain deploy history | ✅ Recipe Book | ❌ |
+| One-command rollback | ✅ | ❌ |
+| Cryptographic proof | ✅ | ❌ |
+| Windows support | ✅ Auto-WSL | ❌ |
+| AI agent support | ✅ MCP | ❌ |
+| Security audit gate | ✅ Radar | ❌ |
+| Cross-chain tested | ✅ Solana devnet | N/A |
+
+## Vision
+
+If you're deploying a program on Cookie Chain, you should be using bake.
+
+See the [README](https://github.com/DiverseXL/bake#readme) for the full roadmap.

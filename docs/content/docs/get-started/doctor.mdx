@@ -1,0 +1,54 @@
+---
+title: bake doctor
+description: Environment health check and diagnostics.
+---
+
+## What it checks
+
+```bash
+bake doctor
+```
+
+Runs a comprehensive diagnostic of your environment:
+
+| Check | What it verifies |
+|-------|------------------|
+| Node.js | Version ≥ 18 |
+| Git | Installed and accessible |
+| WSL | (Windows) WSL relay functional |
+| Wallet | Keypair exists and is valid |
+| Cluster | RPC endpoint reachable |
+| Balance | Sufficient SOL/COOK for deploy |
+| Project | Anchor.toml detected (if in project dir) |
+
+## Output format
+
+```
+bake doctor
+
+  ✔ Node.js v20.11.0
+  ✔ Git 2.43.0
+  ✔ WSL Ubuntu (relay functional)
+  ✔ Wallet ~/.config/solana/id.json
+  ✔ Cluster cookie (https://rpc.cookiescan.io)
+  ✔ Balance 12.5 COOK
+  ✔ Project my-program (Anchor.toml found)
+
+  All checks passed!
+```
+
+## Exit codes
+
+- `0` — all checks passed (including warnings)
+- Non-zero — genuine failure detected
+
+## Flags
+
+| Flag | Description |
+|------|-------------|
+| `--json` | Structured JSON output |
+| `--ci` | Plain, color-free output |
+
+## Troubleshooting
+
+If `bake doctor` reports failures, see [Troubleshooting](/docs/troubleshooting) for known failure signatures and fixes.

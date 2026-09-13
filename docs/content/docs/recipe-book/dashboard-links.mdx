@@ -1,0 +1,41 @@
+---
+title: Dashboard Deep Links
+description: Link from CLI output to the bakeacookie dashboard.
+---
+
+## Program page
+
+After `bake deploy`, the CLI prints a deep link to the dashboard:
+
+```
+https://bakeacookie.dev/program/<address>
+```
+
+This shows:
+- Program address and metadata
+- Timeline of Recipe Book entries
+- Deploy vs rollback badges
+- Live status strip (bytecode verification)
+- Copy-paste `bake` commands per entry
+
+## Wallet page
+
+```
+https://bakeacookie.dev/wallet/<address>
+```
+
+Shows all programs a wallet has deployed to (Recipe Book entries where `deployer === address`).
+
+## Dashboard features
+
+The [bakeacookie dashboard](https://bakeacookie.dev) is a read-only explorer:
+- No login required to view anything
+- Optional wallet connect for "My recipes" filter
+- Never signs or sends transactions
+- Public on-chain data only
+
+## Integration
+
+The CLI automatically prints dashboard links after successful deploys. No configuration needed.
+
+See the [bakeacookie docs](https://bakeacookie.dev/docs) for dashboard-specific documentation.

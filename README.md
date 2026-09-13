@@ -1,36 +1,67 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# bakeacookie 🍪
 
-## Getting Started
+> The companion web dashboard for the [bake CLI](https://github.com/DiverseXL/bake).
 
-First, run the development server:
+Every `bake deploy` writes a permanent on-chain entry to the **Recipe Book** Anchor program on Cookie Chain. `bakeacookie` is the public explorer for that history.
+
+## Quick start
 
 ```bash
+npm install
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Open [http://localhost:3000](http://localhost:3000).
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## Environment
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+Copy `.env.local.example` to `.env.local` and set your RPC:
 
-## Learn More
+```bash
+cp .env.local.example .env.local
+```
 
-To learn more about Next.js, take a look at the following resources:
+| Variable | Default | Description |
+|---|---|---|
+| `NEXT_PUBLIC_RPC_URL` | `https://rpc.cookiescan.io` | Solana/Cookie Chain RPC endpoint |
+| `NEXT_PUBLIC_RECIPE_BOOK_PROGRAM_ID` | `56Vj61zFW4hHV6wdjnisrHtVwWDqyjixjpBgnoRJvzxL` | Recipe Book program address |
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+For local validator: set `NEXT_PUBLIC_RPC_URL=http://localhost:8899`
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+## Tech stack
 
-## Deploy on Vercel
+- **Next.js 16** (App Router) + TypeScript
+- **Tailwind CSS v4** — design tokens in `globals.css` `@theme` block
+- **Solana Wallet Adapter** — standard packages, Wallet Standard auto-detection
+- **@coral-xyz/anchor** — IDL types for the Recipe Book program
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+## Design system
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+Soft neo-brutalism (Cookie Chain aesthetic):
+
+- **Fonts**: Bricolage Grotesque (headlines) + Inter (body)
+- **Chunky cards**: cream fill, 3px navy border, hard offset shadow
+- **Pill buttons**: gold (install), navy (primary), cream (secondary)
+- **Colors**: navy `#0B1F3A`, sky `#7EC8F0`, gold `#F5C84B`, cream `#FFF9F0`
+
+## Routes
+
+| Route | Status |
+|---|---|
+| `/` | ✅ Homepage |
+| `/program/[address]` | 🚧 Scaffold (data-fetching TBD) |
+| `/wallet/[address]` | 🚧 Scaffold (data-fetching TBD) |
+
+## Recipe Book IDL
+
+Located at `lib/idl/recipe_book.json` — copied as-is from the bake CLI repo (hand-verified, do not regenerate). TypeScript types in `lib/types.ts`.
+
+**Program**: `56Vj61zFW4hHV6wdjnisrHtVwWDqyjixjpBgnoRJvzxL`
+
+Accounts:
+- `RecipeBook` — one per deployed program (`target_program_id`, `authority`, `entry_count`)
+- `Entry` — one per deploy (`repo`, `commit`, `build_hash`, `buffer`, `deployer`, `timestamp`)
+
+## Wallet connection
+
+Nightly, Phantom, Backpack, and any other Wallet Standard-compliant wallet auto-detect without a dedicated adapter. The connect button in the nav shows the truncated address once connected.

@@ -1,0 +1,120 @@
+---
+title: Windows & WSL Setup
+description: How bake works on Windows with automatic WSL relay.
+---
+
+## How it works
+
+Anchor/Solana's build toolchain doesn't run natively on Windows — even the official Anchor CLI requires WSL. bake auto-detects native Windows and transparently relays toolchain-dependent commands through WSL.
+
+**You don't need to manually bridge shells.** Just run bake from PowerShell or Command Prompt:
+
+```powershell
+bake deploy
+```
+
+bake detects `process.platform === 'win32'` and automatically relays through:
+
+```
+wsl -d Ubuntu -e bash -lc "..."
+```
+
+## Prerequisites
+
+1. **Windows 10/11** with WSL 2 enabled
+2. **Ubuntu distribution** installed in WSL
+3. **Toolchain installed inside WSL** (not on Windows):
+   - Rust
+   - Solana CLI (Agave)
+   - Anchor CLI
+
+## Setting up WSL
+
+### Enable WSL 2
+
+```powershell
+wsl --install
+```
+
+Restart your computer, then install Ubuntu:
+
+```powershell
+wsl --install -d Ubuntu
+```
+
+### Install toolchain inside WSL
+
+Open Ubuntu from the Start menu and run:
+
+```bash
+# Rust
+curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh
+source ~/.cargo/env
+
+# Solana CLI
+sh -c "$(curl -sSfL https://release.anza.xyz/stable/install)"
+
+# Anchor
+cargo install --git https://github.com/coral-xyz/anchor avm --locked --force
+avm install 1.2.0
+avm use 1.2.0
+```
+
+### Verify
+
+```bash
+# Inside WSL Ubuntu
+which anchor
+which solana
+```
+
+Both should resolve to Linux paths (not `/mnt/c/...`).
+
+## Common issues
+
+### PATH interop problem
+
+If `which node` inside WSL resolves to `/mnt/c/...`, WSL is using Windows-side Node.js. Fix:
+
+1. Edit `/etc/wsl.conf` inside WSL:
+   ```ini
+   [interop]
+   appendWindowsPath = false
+   ```
+2. Restart WSL:
+   ```powershell
+   wsl --shutdown
+   ```
+3. Reopen Ubuntu and verify:
+   ```bash
+   which node  # Should be /usr/bin/node or similar
+   ```
+
+### Platform mismatch errors
+
+If you see errors about `@esbuild/win32-x64` vs `@esbuild/linux-x64`, you ran `npm install` from the wrong environment. Fix:
+
+```bash
+# Inside WSL
+rm -rf node_modules package-lock.json
+npm install
+```
+
+## Verify with bake doctor
+
+```bash
+bake doctor
+```
+
+This checks your WSL setup and reports any issues.
+
+## Non-WSL commands
+
+These commands work natively on Windows without WSL relay:
+
+- `bake login`
+- `bake use`
+- `bake whoami`
+- `bake stats`
+- `bake logs`
+- `bake decode`

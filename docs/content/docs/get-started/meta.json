@@ -1,0 +1,13 @@
+{
+  "title": "Get Started",
+  "pages": [
+    "welcome",
+    "install",
+    "requirements",
+    "quickstart",
+    "first-deploy",
+    "networks",
+    "windows",
+    "doctor"
+  ]
+}

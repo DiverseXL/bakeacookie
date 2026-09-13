@@ -1,0 +1,10 @@
+{
+  "title": "Recipe Book",
+  "pages": [
+    "overview",
+    "accounts-pdas",
+    "instructions",
+    "dashboard-links",
+    "verifying-bytecode"
+  ]
+}

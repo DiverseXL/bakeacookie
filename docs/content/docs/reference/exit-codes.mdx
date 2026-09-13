@@ -1,0 +1,58 @@
+---
+title: Exit Codes
+description: Exit codes for bake commands.
+---
+
+## Standard exit codes
+
+| Code | Meaning |
+|------|---------|
+| `0` | Success |
+| `1` | Failure (command-specific) |
+| `2` | Operational error (tooling, network, etc.) |
+
+## Command-specific codes
+
+### bake audit
+
+| Code | Meaning |
+|------|---------|
+| `0` | No critical/high findings |
+| `1` | At least one critical/high finding |
+| `2` | Operational error: Radar missing, Docker unavailable, or Radar exit 2 |
+
+### bake deploy
+
+| Code | Meaning |
+|------|---------|
+| `0` | Deploy successful |
+| `1` | Deploy failed (build error, insufficient funds, etc.) |
+| `2` | Operational error (tooling, network) |
+
+### bake doctor
+
+| Code | Meaning |
+|------|---------|
+| `0` | All checks passed (including warnings) |
+| Non-zero | Genuine failure detected |
+
+## CI usage
+
+Use exit codes in CI pipelines:
+
+```bash
+# Block on audit failures
+bake audit --ci || exit 1
+
+# Conditional deploy
+bake audit --ci && bake deploy --ci --yes
+```
+
+## Radar exit codes
+
+Radar uses:
+- `0` — clean
+- `1` — findings at/above `--fail-on`
+- `2` — operational error
+
+bake maps Radar's exit 2 (often caused by Docker startup failures) to bake's exit 2, not exit 1. This prevents Docker issues from being misreported as security findings.

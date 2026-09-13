@@ -1,0 +1,76 @@
+---
+title: Audit with Radar
+description: Static analysis for Anchor programs via Radar.
+---
+
+## Overview
+
+```bash
+bake audit
+```
+
+`bake audit` runs [Radar](https://github.com/auditware/radar) — Auditware's static analyzer for Anchor/Rust contracts. This is the tool the Solana docs recommend.
+
+<callout type="info">
+bake implements no security heuristics of its own. All findings are Radar's, labelled "powered by Radar."
+</callout>
+
+## Requirements
+
+- Radar installed (`curl -L https://raw.githubusercontent.com/auditware/radar/main/install-radar.sh | bash`)
+- Docker running (Radar is a 5-container compose stack)
+
+If Radar is missing, bake prints the install command and exits.
+
+## Usage
+
+```bash
+bake audit
+```
+
+## Exit codes
+
+| Code | Meaning |
+|------|---------|
+| 0 | No critical/high findings |
+| 1 | At least one critical/high finding |
+| 2 | Operational error (Radar missing, Docker unavailable) |
+
+## Deploy gating
+
+```bash
+bake deploy --require-audit
+```
+
+Refuses to deploy when any critical/high finding exists. There is deliberately **no `--ignore-audit` override** — the honest framing is "opt into the gate," not "opt into ignoring your own gate."
+
+## Output format
+
+```
+bake audit
+
+  Running Radar analysis...
+
+  found 2 issues:
+    HIGH: Unchecked arithmetic in transfer.rs:42
+    HIGH: Missing signer check in initialize.rs:18
+
+  Exit code: 1 (critical/high findings present)
+```
+
+## CI integration
+
+```bash
+bake audit --ci && echo "Audit passed" || echo "Audit failed"
+```
+
+Use exit code 1 as a CI gate to block deploys with critical/high findings.
+
+## How Radar works
+
+Radar is a static analyzer that:
+1. Parses Rust/Anchor source code
+2. Applies a rule set for known vulnerability patterns
+3. Reports findings with severity levels
+
+bake's role is to make Radar convenient, scriptable, and deploy-gated — not to replace or extend its analysis.

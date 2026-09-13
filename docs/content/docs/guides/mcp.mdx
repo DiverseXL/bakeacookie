@@ -1,0 +1,101 @@
+---
+title: MCP for AI Agents
+description: Let AI agents deploy programs via Model Context Protocol.
+---
+
+## Overview
+
+```bash
+bake mcp
+```
+
+`bake mcp` starts a local stdio-based MCP server that exposes bake's capabilities to AI agents. This is the one command that lets an agent trigger real on-chain writes.
+
+## Safety-first design
+
+<callout type="warning">
+Write tools are UNREGISTERED by default. An agent cannot be tricked into calling a tool it does not know exists.
+</callout>
+
+### Two tiers of tools
+
+**Read-only tools** (always registered):
+- `bake_whoami` — active wallet(s) + cluster
+- `bake_stats` — program activity stats
+- `bake_prove` — Level 1 on-chain hash check
+- `bake_logs` — recent log history
+- `bake_get_history` — Recipe Book entries
+
+**Write tools** (disabled by default):
+- `bake_deploy` — deploy a program
+- `bake_rollback` — rollback to a previous entry
+- `bake_confirm_action` — execute a previewed write
+
+## Policy file
+
+To enable write tools, create a policy file:
+
+```json
+{
+  "allowWrites": true,
+  "allowedPrograms": "any",
+  "maxDeploysPerSession": 5,
+  "requireConfirmation": true
+}
+```
+
+Place at `.bake/mcp-policy.json` or pass via flag:
+
+```bash
+bake mcp --policy /path/to/policy.json
+```
+
+Without a policy file, `bake mcp` starts in **READ-ONLY mode**.
+
+## Confirmation flow
+
+When `requireConfirmation: true` (default):
+
+1. Agent calls `bake_deploy` or `bake_rollback`
+2. Server returns `status: "confirmation_required"` with a preview and `confirmationToken`
+3. Agent (or human) calls `bake_confirm_action` with that token
+4. Server executes the action
+
+This is the human-in-the-loop safety net — a real deploy cannot complete in a single unsupervised tool call.
+
+## Session limits
+
+The MCP server tracks writes per session. Once `maxDeploysPerSession` is hit, all further write calls are refused. The counter resets only when the MCP server process restarts.
+
+## Audit logging
+
+Every write tool call (attempted or executed, allowed or refused) is logged to stderr with an ISO timestamp. Stdout is reserved for the MCP protocol.
+
+## cookie-mcp integration
+
+`bake_check_token_liquidity` spawns the official `cookie-mcp` npm package as an isolated child MCP process for read-only token/liquidity lookups.
+
+Key constraints:
+- Stdio isolation (piped, not inherited)
+- No `COOKIE_PRIVATE_KEY` (strictly read-only)
+- Lazy singleton (spawned on first use)
+- Requires Node.js ≥ 22
+
+## Usage with AI agents
+
+```bash
+# Start MCP server
+bake mcp
+
+# Or with explicit policy
+bake mcp --policy .bake/mcp-policy.json
+```
+
+Configure your AI agent to connect to bake's MCP server over stdio.
+
+## Implementation files
+
+- `src/commands/mcp.ts` — command entrypoint
+- `src/lib/mcpServer.ts` — tool definitions and handlers
+- `src/lib/mcpPolicy.ts` — policy schema and loader
+- `src/lib/cookieMcpClient.ts` — cookie-mcp client

@@ -1,0 +1,27 @@
+---
+title: Environment Variables
+description: Environment variables that affect bake's behavior.
+---
+
+## CLI environment variables
+
+| Variable | Default | Description |
+|----------|---------|-------------|
+| `BAKE_CI` | (unset) | Set to `1` to force CI mode (no prompts, no spinners) |
+| `BAKE_JSON` | (unset) | Set to `1` to force JSON output mode |
+| `BAKE_MOCK_RECIPE_BOOK` | (unset) | Set to `1` to use mock Recipe Book (for testing) |
+| `ANCHOR_WALLET` | `~/.config/solana/id.json` | Path to wallet keypair |
+| `ANCHOR_PROVIDER_URL` | (from `bake use`) | RPC endpoint URL |
+
+## Dashboard environment variables
+
+| Variable | Default | Description |
+|----------|---------|-------------|
+| `NEXT_PUBLIC_RPC_URL` | `https://rpc.cookiescan.io` | Solana/Cookie Chain RPC endpoint |
+| `NEXT_PUBLIC_RECIPE_BOOK_PROGRAM_ID` | `56Vj61zFW4hHV6wdjnisrHtVwWDqyjixjpBgnoRJvzxL` | Recipe Book program address |
+
+## Notes
+
+- `BAKE_MOCK_RECIPE_BOOK=1` is useful for testing command orchestration without touching a real chain
+- `BAKE_CI` and `BAKE_JSON` disable all interactive prompts — safe for CI/CD pipelines
+- `ANCHOR_PROVIDER_URL` and `ANCHOR_WALLET` follow Anchor conventions

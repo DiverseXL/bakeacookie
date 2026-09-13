@@ -1,0 +1,61 @@
+---
+title: Logs & History
+description: View program logs and deploy history.
+---
+
+## View recent logs
+
+```bash
+bake logs
+```
+
+Shows recent program logs with Anchor event decoding.
+
+## Live streaming
+
+```bash
+bake logs -f
+```
+
+Follow mode — streams logs in real-time as transactions arrive.
+
+## Filter by program
+
+```bash
+bake logs <programId>
+```
+
+View logs for a specific program. If omitted, uses the program in the current project's `Anchor.toml`.
+
+## Output format
+
+Logs include:
+- Transaction signatures
+- Instruction names
+- Anchor event data (decoded via IDL)
+- Compute units consumed
+- Error details (if any)
+
+## CI mode
+
+```bash
+bake logs --ci
+```
+
+Plain, color-free output suitable for CI pipelines.
+
+```bash
+bake logs --json
+```
+
+Structured JSON output for scripting.
+
+## Recipe Book history
+
+To view deploy history (not runtime logs), use the [bakeacookie dashboard](https://bakeacookie.dev) or check the Recipe Book directly:
+
+```bash
+bake stats <programId>
+```
+
+See [Stats](/docs/guides/stats) for program activity metrics.

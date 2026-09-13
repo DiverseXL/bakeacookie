@@ -1,0 +1,57 @@
+---
+title: Install
+description: Install bake on macOS, Linux, or Windows.
+---
+
+## Quick install
+
+```bash
+npm install -g bakeacookie
+```
+
+The package is published as `bakeacookie` (the shorter names were already taken), but the command you run is just:
+
+```bash
+bake --help
+```
+
+## Verify installation
+
+```bash
+bake --version
+bake doctor
+```
+
+`bake doctor` runs a full environment health check — Node.js, git, WSL (on Windows), wallet, cluster, balance, and project detection.
+
+## Windows users
+
+bake needs a Solana/Anchor toolchain available via WSL for build/deploy commands. **Native Windows toolchain does not work** — Anchor/Solana CLI binaries are Linux-only.
+
+bake auto-detects Windows and transparently relays commands through WSL. After install, run:
+
+```bash
+bake doctor
+```
+
+This will check your WSL setup and report any issues. See [Windows & WSL Setup](/docs/get-started/windows) for detailed instructions.
+
+## Requirements by use case
+
+Not every command needs the full toolchain:
+
+| Command | Requirements |
+|---------|--------------|
+| `bake login`, `bake use`, `bake whoami` | Node.js only |
+| `bake stats`, `bake logs`, `bake decode` | Node.js + network |
+| `bake init`, `bake deploy`, `bake rollback` | Node.js + Rust + Solana CLI + Anchor |
+| `bake audit` | All above + Radar + Docker |
+| `bake fork` | Node.js + Solana CLI |
+
+See [Requirements](/docs/get-started/requirements) for the full breakdown.
+
+## Uninstall
+
+```bash
+npm uninstall -g bakeacookie
+```

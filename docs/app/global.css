@@ -1,0 +1,59 @@
+@import "fumadocs-ui/style.css";
+
+:root {
+  /* Fumadocs theme variables — dark-first */
+  --fd-background: 0 0 0;
+  --fd-foreground: 0 0 0;
+}
+
+/* Dark theme (default) */
+:root[data-theme="dark"] {
+  --fd-background: 222 47% 7%;
+  --fd-foreground: 210 40% 98%;
+}
+
+/* Light theme */
+:root[data-theme="light"] {
+  --fd-background: 0 0% 100%;
+  --fd-foreground: 222 47% 7%;
+}
+
+/* Custom colors for bake branding */
+:root {
+  --color-navy: #0B1F3A;
+  --color-sky: #7EC8F0;
+  --color-gold: #F5C84B;
+  --color-cream: #FFF9F0;
+}
+
+/* Code block styling */
+pre {
+  font-family: "JetBrains Mono", "Fira Code", ui-monospace, monospace !important;
+}
+
+/* Sidebar styling */
+nav[aria-label="Sidebar"] {
+  border-right: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+/* Callout styling for warnings/tips */
+.callout {
+  border-radius: 0.75rem;
+  padding: 1rem;
+  margin: 1rem 0;
+}
+
+.callout-warning {
+  background: rgba(251, 191, 36, 0.1);
+  border-left: 4px solid #F5C84B;
+}
+
+.callout-info {
+  background: rgba(126, 200, 240, 0.1);
+  border-left: 4px solid #7EC8F0;
+}
+
+.callout-danger {
+  background: rgba(239, 68, 68, 0.1);
+  border-left: 4px solid #EF4444;
+}

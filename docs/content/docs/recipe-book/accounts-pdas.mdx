@@ -1,0 +1,80 @@
+---
+title: Accounts & PDAs
+description: On-chain account structure and PDA derivation.
+---
+
+## RecipeBook account
+
+One per deployed program.
+
+| Field | Type | Description |
+|-------|------|-------------|
+| `target_program_id` | `pubkey` | The program this RecipeBook tracks |
+| `authority` | `pubkey` | Who initialized it |
+| `entry_count` | `u64` | Total deploy entries |
+| `bump` | `u8` | PDA bump |
+
+### PDA seeds
+
+```
+["recipe_book", target_program_id]
+```
+
+### Derivation
+
+```typescript
+PublicKey.findProgramAddressSync(
+  [Buffer.from("recipe_book"), targetProgramId.toBuffer()],
+  RECIPE_BOOK_PROGRAM_ID
+)
+```
+
+## Entry account
+
+One per deploy.
+
+| Field | Type | Description |
+|-------|------|-------------|
+| `recipe_book` | `pubkey` | Parent RecipeBook |
+| `index` | `u64` | 0-indexed deploy number |
+| `repo` | `string` | Git remote URL or short name |
+| `commit` | `string` | Git commit SHA |
+| `build_hash` | `[u8; 32]` | SHA-256 of compiled binary |
+| `buffer` | `pubkey` | Buffer program account |
+| `deployer` | `pubkey` | Wallet that deployed |
+| `timestamp` | `i64` | Unix timestamp |
+| `bump` | `u8` | PDA bump |
+
+### PDA seeds
+
+```
+["entry", recipe_book_pubkey, entry_index_le_bytes]
+```
+
+### Derivation
+
+```typescript
+const indexBuf = Buffer.alloc(8);
+indexBuf.writeBigUInt64LE(index);
+
+PublicKey.findProgramAddressSync(
+  [Buffer.from("entry"), recipeBookPubkey.toBuffer(), indexBuf],
+  RECIPE_BOOK_PROGRAM_ID
+)
+```
+
+## Relationships
+
+```
+RecipeBook (1)
+    └── Entry (many)
+        ├── Entry #0
+        ├── Entry #1
+        └── Entry #2
+```
+
+Each RecipeBook tracks one target program. Each Entry is a single deploy event.
+
+## IDL
+
+The IDL is at `lib/idl/recipe_book.json` in the dashboard repo — hand-verified against the deployed program. Do not auto-generate a replacement.

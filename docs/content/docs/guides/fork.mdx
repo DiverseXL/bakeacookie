@@ -1,0 +1,75 @@
+---
+title: Fork a Program
+description: Clone a real on-chain program into a local validator for rehearsal.
+---
+
+## Overview
+
+```bash
+bake fork <programId>
+```
+
+`bake fork` clones a real on-chain program (and optionally its accounts) from any source cluster into a fresh `solana-test-validator`, so you can rehearse changes against real state for free.
+
+## Usage
+
+```bash
+# Clone from Cookie Chain (default)
+bake fork 56Vj61zFW4hHV6wdjnisrHtVwWDqyjixjpBgnoRJvzxL
+
+# Clone from Solana mainnet
+bake fork <programId> --source mainnet
+
+# Clone from custom RPC
+bake fork <programId> --source https://my-rpc.example.com
+
+# Include accounts
+bake fork <programId> --fetch-program-accounts
+
+# Specific accounts only
+bake fork <programId> --accounts <addr1> <addr2>
+```
+
+## Source resolution
+
+| Flag | Source |
+|------|--------|
+| (default) | Solana mainnet |
+| `--source mainnet` | Solana mainnet |
+| `--source devnet` | Solana devnet |
+| `--source cookie` | Cookie Chain |
+| `--source <url>` | Custom RPC |
+
+## Pre-flight validation
+
+Before spawning the validator, bake:
+1. Resolves and validates the source RPC (sends `getGenesisHash`)
+2. Optionally calls `getProgramAccounts` (opt-in via `--fetch-program-accounts`)
+3. Prints a summary of what will be cloned
+4. Spawns the validator in the foreground
+
+## Foreground execution
+
+The validator runs as a foreground process with live-streamed output. It stays alive until you press Ctrl+C.
+
+## Port handling
+
+Defaults to port 8899. If the port is in use:
+
+```bash
+bake fork <programId> --port 8900
+```
+
+## Known constraints
+
+### `getProgramAccounts` rate limiting
+
+Free public Solana RPCs commonly reject or rate-limit `getProgramAccounts` calls. When this happens, bake prints a warning and falls back to cloning only the bare program.
+
+**Fix:** Use a paid RPC provider via `--source <url>`, or omit `--fetch-program-accounts` and list specific accounts via `--accounts`.
+
+### WSL2 resource exhaustion
+
+Repeated rapid `bake fork` invocations can exhaust WSL2 memory/CPU resources. Mitigation: fully stop one fork's validator (Ctrl+C) before starting another.
+
+If WSL crashes, run `wsl --shutdown` from PowerShell, wait, then restart.

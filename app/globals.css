@@ -1,26 +1,251 @@
 @import "tailwindcss";
 
+/* ─────────────────────────────────────────────
+   Tailwind v4 theme extension — all design tokens
+   defined here become Tailwind utility classes
+   (e.g. bg-navy, text-cream, shadow-chunky, etc.)
+   ───────────────────────────────────────────── */
+@theme {
+  /* Colors */
+  --color-bg: #eaf4fb;
+  --color-ink: #040e1b;
+  --color-navy: #0b1f3a;
+  --color-sky: #7ec8f0;
+  --color-sky-deep: #5bb8e8;
+  --color-cream: #fff9f0;
+  --color-gold: #f5c84b;
+  --color-gold-deep: #e8b84a;
+  --color-live: #22c55e;
+  --color-terminal: #0d1117;
+  --color-terminal-header: #161b22;
+
+  /* Fonts */
+  --font-display: var(--font-bricolage), sans-serif;
+  --font-body: var(--font-inter), sans-serif;
+  --font-mono: var(--font-mono), "JetBrains Mono", "Fira Code", ui-monospace, monospace;
+
+  /* Border radii */
+  --radius-card: 1.75rem;
+  --radius-pill: 9999px;
+}
+
+/* ─────────────────────────────────────────────
+   CSS custom properties (used by plain CSS,
+   not Tailwind utility classes)
+   ───────────────────────────────────────────── */
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  /* The complete chunky-card shadow stack — the core visual signature.
+     Hard offset: 0 8px 0 0 (no blur, just offset)
+     Soft depth:  0 24px 60px (ambient halo)
+     Inset:       inset 0 3px 0 (top highlight) */
+  --shadow-chunky:
+    0 8px 0 0 rgba(11, 31, 58, 0.78),
+    0 24px 60px rgba(11, 31, 58, 0.18),
+    inset 0 3px 0 rgba(255, 255, 255, 0.9);
+  --border-chunky: 3px solid rgba(11, 31, 58, 0.9);
+
+  --shadow-nav:
+    0 4px 0 0 rgba(11, 31, 58, 0.55),
+    0 8px 32px rgba(11, 31, 58, 0.12),
+    inset 0 1px 0 rgba(255, 255, 255, 0.7);
 }
 
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+/* ── Reset & base ── */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+html {
+  scroll-behavior: smooth;
+  -webkit-font-smoothing: antialiased;
 }
 
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  background-color: #eaf4fb;
+  color: #040e1b;
+  min-height: 100dvh;
+}
+
+/* ─────────────────────────────────────────────
+   @layer utilities — makes these available as
+   Tailwind utility classes AND ensures they
+   aren't stripped or overridden by Tailwind's
+   reset in v4.
+   ───────────────────────────────────────────── */
+@layer utilities {
+
+  /* ── Core visual signature: chunky card ──
+     cream fill, 3px solid navy border,
+     hard-offset shadow + soft depth + inset highlight */
+  .card-chunky {
+    background: #fff9f0;
+    border: 3px solid rgba(11, 31, 58, 0.9);
+    border-radius: 1.75rem;
+    box-shadow:
+      0 8px 0 0 rgba(11, 31, 58, 0.78),
+      0 24px 60px rgba(11, 31, 58, 0.18),
+      inset 0 3px 0 rgba(255, 255, 255, 0.9);
+  }
+
+  /* Smaller variant for tight contexts */
+  .card-chunky-sm {
+    background: #fff9f0;
+    border: 3px solid rgba(11, 31, 58, 0.9);
+    border-radius: 1.25rem;
+    box-shadow:
+      0 4px 0 0 rgba(11, 31, 58, 0.65),
+      0 12px 32px rgba(11, 31, 58, 0.14),
+      inset 0 2px 0 rgba(255, 255, 255, 0.85);
+  }
+}
+
+/* ─────────────────────────────────────────────
+   Buttons — defined outside @layer so they win
+   over Tailwind resets via specificity
+   ───────────────────────────────────────────── */
+
+/* Gold = "sweet" actions only (install, featured CTAs) */
+.btn-gold {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.75rem 1.75rem;
+  background: #f5c84b;
+  color: #0b1f3a;
+  border: 2px solid #0b1f3a;
+  border-radius: 9999px;
+  font-weight: 700;
+  font-size: 0.95rem;
+  box-shadow: 0 4px 0 0 rgba(11, 31, 58, 0.7);
+  cursor: pointer;
+  transition: box-shadow 0.12s ease, transform 0.12s ease;
+  white-space: nowrap;
+  text-decoration: none;
+}
+.btn-gold:hover {
+  box-shadow: 0 2px 0 0 rgba(11, 31, 58, 0.7);
+  transform: translateY(2px);
+}
+.btn-gold:active {
+  box-shadow: none;
+  transform: translateY(4px);
+}
+
+/* Navy = primary CTA */
+.btn-navy {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.75rem 1.75rem;
+  background: #0b1f3a;
+  color: #ffffff;
+  border: 2px solid #0b1f3a;
+  border-radius: 9999px;
+  font-weight: 700;
+  font-size: 0.95rem;
+  box-shadow: 0 4px 0 0 rgba(11, 31, 58, 0.55);
+  cursor: pointer;
+  transition: box-shadow 0.12s ease, transform 0.12s ease;
+  text-decoration: none;
+}
+.btn-navy:hover {
+  box-shadow: 0 2px 0 0 rgba(11, 31, 58, 0.55);
+  transform: translateY(2px);
+}
+.btn-navy:active {
+  box-shadow: none;
+  transform: translateY(4px);
+}
+
+/* Cream = secondary/outlined */
+.btn-cream {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.75rem 1.75rem;
+  background: #fff9f0;
+  color: #0b1f3a;
+  border: 2px solid #0b1f3a;
+  border-radius: 9999px;
+  font-weight: 700;
+  font-size: 0.95rem;
+  box-shadow: 0 4px 0 0 rgba(11, 31, 58, 0.55);
+  cursor: pointer;
+  transition: box-shadow 0.12s ease, transform 0.12s ease;
+  text-decoration: none;
+}
+.btn-cream:hover {
+  box-shadow: 0 2px 0 0 rgba(11, 31, 58, 0.55);
+  transform: translateY(2px);
+}
+.btn-cream:active {
+  box-shadow: none;
+  transform: translateY(4px);
+}
+
+/* ── Wallet adapter overrides ── */
+.wallet-adapter-button {
+  border-radius: 9999px !important;
+  background-color: #fff9f0 !important;
+  color: #0b1f3a !important;
+  border: 2px solid #0b1f3a !important;
+  font-family: inherit !important;
+  font-weight: 700 !important;
+  font-size: 0.875rem !important;
+  padding: 0.5rem 1.25rem !important;
+  height: auto !important;
+  box-shadow: 0 3px 0 0 rgba(11, 31, 58, 0.6) !important;
+  transition: box-shadow 0.12s ease, transform 0.12s ease !important;
+  line-height: 1.4 !important;
+}
+.wallet-adapter-button:hover {
+  background-color: #7ec8f0 !important;
+  box-shadow: 0 1px 0 0 rgba(11, 31, 58, 0.6) !important;
+  transform: translateY(2px) !important;
+}
+.wallet-adapter-button-trigger {
+  background-color: #0b1f3a !important;
+  color: #fff !important;
+}
+.wallet-adapter-modal-wrapper {
+  border-radius: 1.75rem !important;
+  border: 3px solid rgba(11, 31, 58, 0.9) !important;
+  box-shadow:
+    0 8px 0 0 rgba(11, 31, 58, 0.78),
+    0 24px 60px rgba(11, 31, 58, 0.18),
+    inset 0 3px 0 rgba(255, 255, 255, 0.9) !important;
+}
+
+/* ── Skeleton pulse ── */
+@keyframes skeleton-pulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.45; }
+}
+.skeleton {
+  background: rgba(11, 31, 58, 0.08);
+  border-radius: 0.5rem;
+  animation: skeleton-pulse 1.8s ease-in-out infinite;
+}
+
+/* ── Cookie particle float ── */
+@keyframes float-cookie {
+  0%, 100% { transform: translateY(0px) rotate(0deg); opacity: 0.12; }
+  33% { transform: translateY(-18px) rotate(8deg); opacity: 0.18; }
+  66% { transform: translateY(-8px) rotate(-5deg); opacity: 0.14; }
+}
+.cookie-particle {
+  animation: float-cookie var(--dur, 7s) ease-in-out infinite;
+  animation-delay: var(--delay, 0s);
+}
+
+/* ── Terminal cursor blink ── */
+@keyframes cursor-blink {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0; }
+}
+.terminal-cursor {
+  background: #0B1F3A;
+  animation: cursor-blink 1s step-end infinite;
 }

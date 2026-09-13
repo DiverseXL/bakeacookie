@@ -1,0 +1,55 @@
+---
+title: Verifying Bytecode
+description: How bake prove verifies on-chain binary matches Recipe Book.
+---
+
+## Overview
+
+`bake prove` verifies that the on-chain binary matches what the Recipe Book says was deployed. This is cryptographic proof, not just "is the account executable."
+
+## The verification process
+
+1. **Fetch ProgramData** — get the account's data bytes
+2. **Skip header** — the ProgramData account has a header that's not part of the binary
+3. **Parse ELF64 header** — determine the exact binary length from the ELF header
+4. **Hash** — compute SHA-256 of the binary portion
+5. **Compare** — match against the recorded build hash in the Recipe Book
+
+## Why this is hard
+
+The naive approach ("hash all the bytes") fails because:
+- ProgramData accounts have headers that aren't part of the binary
+- ELF64 binaries have variable-length headers
+- Trailing zeros can't be stripped heuristically
+
+The correct approach:
+- Skip the fixed-size ProgramData header
+- Parse the ELF64 `e_phoff` and `e_phnum` fields to find the program header table
+- Use `e_entry` + program headers to determine exact binary length
+- Hash only the binary bytes
+
+## Implementation
+
+The exact computation is in the CLI's `src/lib/deployPipeline.ts` (`fetchOnChainBytecodeHash`). This went through two real bugs during development:
+
+1. **Wrong header byte count** — initially skipped too few bytes
+2. **Flawed trailing-zero stripping** — tried to strip trailing zeros, which broke on legitimate zero-padded sections
+
+The current approach is verified against real deployments.
+
+## Dashboard verification
+
+The [bakeacookie dashboard](https://bakeacookie.dev) performs the same verification for the "live status strip" on program pages. It uses the exact same logic as the CLI — ported, not reimplemented.
+
+## Level 2: Full reproducibility
+
+```bash
+bake prove --rebuild
+```
+
+Goes further by:
+1. Checking out the exact commit from the Recipe Book
+2. Rebuilding from source
+3. Comparing the rebuilt binary against the on-chain binary
+
+This proves source → binary → on-chain integrity.

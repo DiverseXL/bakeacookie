@@ -1,0 +1,96 @@
+---
+title: Troubleshooting
+description: Known failure signatures and fixes.
+---
+
+## Known failure signatures
+
+| Symptom | Real cause | Fix |
+|---------|------------|-----|
+| `Failed to parse ELF file: invalid file header` | Default build targets SBPF v3, validator can't run it | `anchor build --arch v0 --tools-version v1.57` |
+| `Program is not deployed` / `Unsupported program id` on fresh `anchor test` | Known Anchor bug: test suite can start before validator finishes booting | Run validator, build, and deploy as 3 separate manual steps |
+| `Upgrade authority mismatch` | Stale/leftover validator ledger from a previous session | `solana-test-validator --reset`, or kill orphaned validator and delete `.anchor/test-ledger` |
+| `esbuild` platform mismatch error | `node_modules` installed on the wrong OS (Windows vs WSL) | Delete `node_modules` + `package-lock.json`, reinstall from the correct environment |
+| `ANCHOR_PROVIDER_URL is not defined` despite `Anchor.toml` looking correct | Windows/WSL PATH interop — WSL silently invoked Windows-side Node.js | Check `which node` inside WSL; if `/mnt/c/...`, disable interop in `/etc/wsl.conf` |
+| `error[E0432]: unresolved import 'crate'` at `#[program]` macro | Anchor version mismatch (anchor-cli vs anchor-lang) | Confirm versions match in `Cargo.toml` and installed CLI |
+| `librustc_driver-*.so: cannot open shared object file` | Corrupted platform-tools cache | `rm -rf ~/.cache/solana/<version>`, let it redownload |
+| Deploy retries into a stale buffer | `anchor deploy` auto-resumes into leftover buffer | `solana program close <buffer-address>`, delete `*-upgrade-buffer.json`, redeploy fresh |
+
+## Windows/WSL issues
+
+### PATH interop
+
+If `which node` inside WSL resolves to `/mnt/c/...`:
+
+1. Edit `/etc/wsl.conf`:
+   ```ini
+   [interop]
+   appendWindowsPath = false
+   ```
+2. Restart WSL:
+   ```powershell
+   wsl --shutdown
+   ```
+3. Reopen Ubuntu and verify
+
+### Platform mismatch
+
+If you see `@esbuild/win32-x64` vs `@esbuild/linux-x64` errors:
+
+```bash
+# Inside WSL
+rm -rf node_modules package-lock.json
+npm install
+```
+
+## Stale buffers
+
+If deploy fails with odd buffer errors:
+
+```bash
+# Find the buffer address from the error message
+solana program close <buffer-address>
+
+# Delete local buffer file
+rm -f *-upgrade-buffer.json
+
+# Redeploy
+bake deploy
+```
+
+## Validator issues
+
+### Reset validator
+
+```bash
+solana-test-validator --reset
+```
+
+### Kill orphaned validator
+
+```bash
+# Find and kill
+ps aux | grep solana-test-validator
+kill <pid>
+
+# Delete ledger
+rm -rf .anchor/test-ledger
+```
+
+## Funding COOK
+
+Cookie Chain uses COOK token for transaction fees. To get COOK:
+
+1. Visit the Cookie Chain faucet
+2. Bridge from Solana mainnet if needed
+
+See [Cookie Chain docs](https://docs.cookiechain.wtf) for current funding options.
+
+## Still stuck?
+
+1. Run `bake doctor` for environment diagnostics
+2. Check [GitHub Issues](https://github.com/DiverseXL/bake/issues) for known problems
+3. Open a new issue with:
+   - `bake doctor --json` output
+   - The exact error message
+   - Your OS and WSL version (if Windows)

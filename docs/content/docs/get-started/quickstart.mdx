@@ -1,0 +1,43 @@
+---
+title: Quickstart
+description: Deploy your first program in 60 seconds.
+---
+
+## Deploy in 60 seconds
+
+```bash
+# 1. Install
+npm install -g bakeacookie
+
+# 2. Login (creates or links a local wallet)
+bake login
+
+# 3. Point at Cookie Chain
+bake use cookie
+
+# 4. Scaffold a new project
+bake init my-program
+
+# 5. Deploy
+cd my-program
+bake deploy
+
+# 6. Watch it live
+bake logs -f
+```
+
+That's it. Your program is now deployed on Cookie Chain with a permanent on-chain record in the Recipe Book.
+
+## What just happened?
+
+1. **`bake login`** — created a local keypair (or linked an existing one)
+2. **`bake use cookie`** — set Cookie Chain as the active cluster
+3. **`bake init`** — scaffolded a new Anchor project pre-wired for Cookie Chain
+4. **`bake deploy`** — built the program, deployed it, hashed the binary, and registered the deploy in the Recipe Book
+5. **`bake logs -f`** — live-streamed program logs
+
+## Next steps
+
+- **[First Deploy](/docs/get-started/first-deploy)** — detailed step-by-step walkthrough
+- **[Deploy Guide](/docs/guides/deploy)** — what `bake deploy` actually does under the hood
+- **[Recipe Book](/docs/recipe-book/overview)** — understand the on-chain deploy ledger

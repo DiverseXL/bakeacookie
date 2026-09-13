@@ -1,0 +1,59 @@
+---
+title: CI Mode
+description: Use bake in CI/CD pipelines.
+---
+
+## Global flags
+
+Every bake command supports:
+
+| Flag | Description |
+|------|-------------|
+| `--ci` | Plain, color-free output; no spinners; no interactive prompts |
+| `--json` | Structured JSON output; no decorative text |
+
+## CI usage
+
+```bash
+# Deploy in CI
+bake deploy --ci --yes
+
+# Audit gate
+bake audit --ci && echo "Passed" || echo "Failed"
+
+# Stats as JSON
+bake stats --json | jq '.invocations'
+```
+
+## Non-interactive behavior
+
+In CI/JSON contexts:
+- No interactive prompts (wallet creation, confirmation dialogs)
+- No spinners or progress bars
+- No color codes
+- Errors go to stderr with structured output
+
+## Wallet in CI
+
+CI environments need a wallet. Options:
+
+1. **Environment variable**: Set `ANCHOR_WALLET` to a keypair path
+2. **Pre-created keypair**: Place `id.json` in the expected location
+3. **`bake login` in setup step**: Create wallet before deploy step
+
+```yaml
+# GitHub Actions example
+- name: Setup wallet
+  run: bake login --ci
+
+- name: Deploy
+  run: bake deploy --ci --yes
+```
+
+## Exit codes
+
+All commands use consistent exit codes:
+- `0` — success
+- Non-zero — failure (specific codes vary by command)
+
+See [Exit Codes](/docs/reference/exit-codes) for details.

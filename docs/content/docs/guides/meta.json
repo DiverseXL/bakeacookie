@@ -1,0 +1,15 @@
+{
+  "title": "Guides",
+  "pages": [
+    "deploy",
+    "rollback",
+    "prove",
+    "logs",
+    "stats",
+    "audit",
+    "fork",
+    "diff-decode",
+    "ci",
+    "mcp"
+  ]
+}

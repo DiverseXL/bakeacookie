@@ -1,0 +1,66 @@
+---
+title: Clusters & Config
+description: Configuration files and cluster settings.
+---
+
+## Global config
+
+Location: `~/.bake/config.json`
+
+```json
+{
+  "activeCluster": "cookie",
+  "walletPath": "~/.config/solana/id.json"
+}
+```
+
+### Fields
+
+| Field | Type | Description |
+|-------|------|-------------|
+| `activeCluster` | `string` | Current cluster name or RPC URL |
+| `walletPath` | `string` | Path to local keypair |
+
+### Config locking
+
+bake uses atomic file locking (`~/.bake/config.lock`) to prevent concurrent processes from clobbering config writes. Locks are:
+- Acquired via `O_CREAT | O_EXCL` (atomic OS-level check)
+- Retried 10 times at 50ms intervals
+- Treated as abandoned after 5 seconds
+- Released in `finally` blocks
+
+## Project config
+
+Location: `bake.config.json` in project root (created by `bake init`)
+
+```json
+{
+  "programId": "56Vj61zFW4hHV6wdjnisrHtVwWDqyjixjpBgnoRJvzxL"
+}
+```
+
+## Built-in clusters
+
+| Name | RPC |
+|------|-----|
+| `cookie` | `https://rpc.cookiescan.io` |
+| `mainnet` | `https://api.mainnet-beta.solana.com` |
+| `devnet` | `https://api.devnet.solana.com` |
+
+## Custom clusters
+
+Any valid Solana RPC URL works:
+
+```bash
+bake use https://my-rpc.example.com
+```
+
+## Anchor.toml
+
+bake reads `Anchor.toml` for project detection and program ID resolution. The `[provider]` section must stay populated:
+
+```toml
+[provider]
+cluster = "localnet"
+wallet = "~/.config/solana/id.json"
+```
