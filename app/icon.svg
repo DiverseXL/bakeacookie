@@ -1,0 +1,52 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" width="64" height="64">
+  <defs>
+    <!-- Bite-shaped clip: cookie circle minus a jagged bite out of the top-right -->
+    <clipPath id="bitten">
+      <path d="
+        M32 0
+        A32 32 0 1 1 32 64
+        A32 32 0 1 1 32 0
+        Z
+        M54 2
+        C48 2, 44 6, 46 12
+        C42 8, 38 4, 32 6
+        C36 14, 42 16, 50 14
+        C46 18, 40 20, 34 16
+        C38 24, 46 24, 52 18
+        C56 22, 56 28, 52 30
+        L62 2
+        Z
+      " fill="black"/>
+    </clipPath>
+  </defs>
+
+  <!-- Clipped cookie -->
+  <g clip-path="url(#bitten)">
+    <!-- Cookie base -->
+    <circle cx="32" cy="32" r="32" fill="#E8B84A"/>
+
+    <!-- Slight inner shadow for depth -->
+    <circle cx="32" cy="32" r="30" fill="none" stroke="#C89830" stroke-width="1.5" opacity="0.4"/>
+
+    <!-- Chocolate chips -->
+    <ellipse cx="17" cy="22" rx="5" ry="4" fill="#3D1C02" transform="rotate(-15 17 22)"/>
+    <ellipse cx="22" cy="42" rx="4.5" ry="3.5" fill="#3D1C02" transform="rotate(-5 22 42)"/>
+    <ellipse cx="12" cy="36" rx="3.5" ry="3" fill="#3D1C02" transform="rotate(-10 12 36)"/>
+    <ellipse cx="40" cy="44" rx="4" ry="3" fill="#3D1C02" transform="rotate(15 40 44)"/>
+    <ellipse cx="34" cy="54" rx="3" ry="2.5" fill="#3D1C02" transform="rotate(5 34 54)"/>
+    <ellipse cx="18" cy="12" rx="3" ry="2.5" fill="#3D1C02" transform="rotate(-20 18 12)"/>
+    <ellipse cx="48" cy="30" rx="3.5" ry="3" fill="#3D1C02" transform="rotate(20 48 30)"/>
+    <ellipse cx="30" cy="30" rx="4" ry="3" fill="#3D1C02" transform="rotate(-8 30 30)"/>
+  </g>
+
+  <!-- Bite edge outline for definition -->
+  <path d="
+    M54 2
+    C48 2, 44 6, 46 12
+    C42 8, 38 4, 32 6
+    C36 14, 42 16, 50 14
+    C46 18, 40 20, 34 16
+    C38 24, 46 24, 52 18
+    C56 22, 56 28, 52 30
+  " fill="none" stroke="#C89830" stroke-width="1.5" stroke-linecap="round"/>
+</svg>
