@@ -50,7 +50,7 @@ export default function CopyInstall() {
     <div id="install-cta" className="w-full max-w-full overflow-x-auto pb-1">
       <div className="flex w-max items-center gap-3">
         <div
-          className="inline-flex items-center gap-3 rounded-pill border-[3px] border-navy bg-gold py-2 pl-5 pr-2"
+          className="inline-flex items-center gap-2 sm:gap-3 rounded-pill border-[3px] border-navy bg-gold py-1.5 sm:py-2 pl-3 sm:pl-5 pr-1.5 sm:pr-2"
           style={{
             boxShadow:
               "0 4px 0 0 rgba(11, 31, 58, 0.7), inset 0 2px 0 rgba(255, 255, 255, 0.55)",
@@ -59,7 +59,7 @@ export default function CopyInstall() {
           <code
             ref={codeRef}
             id="install-command"
-            className="select-all whitespace-nowrap font-mono text-base font-semibold text-navy sm:text-lg"
+            className="select-all whitespace-nowrap font-mono text-sm sm:text-base font-semibold text-navy lg:text-lg"
           >
             {INSTALL_COMMAND}
           </code>
@@ -68,7 +68,7 @@ export default function CopyInstall() {
             id="install-copy-btn"
             onClick={handleCopy}
             aria-label={copied ? "Copied!" : "Copy install command"}
-            className={`inline-flex shrink-0 items-center gap-1.5 rounded-pill border-2 border-navy px-3 py-1.5 text-xs font-bold transition-all duration-150 ${
+            className={`inline-flex shrink-0 items-center gap-1 sm:gap-1.5 rounded-pill border-2 border-navy px-2 sm:px-3 py-1 sm:py-1.5 text-[11px] sm:text-xs font-bold transition-all duration-150 ${
               copied
                 ? "bg-navy text-white shadow-none"
                 : "bg-cream text-navy shadow-[0_2px_0_0_rgba(11,31,58,0.6)] hover:translate-y-[1px] hover:shadow-[0_1px_0_0_rgba(11,31,58,0.6)]"

@@ -112,14 +112,16 @@ export default function Footer() {
           <div className="flex flex-col gap-3">
             <FooterColumnTitle>CLI Cheat Sheet</FooterColumnTitle>
             <div
-              className="rounded-xl border-2 border-navy/15 bg-navy/[0.03] px-4 py-3.5"
+              className="rounded-xl border-2 border-navy/15 bg-navy/[0.03] px-4 py-3.5 overflow-hidden"
             >
               <pre
-                className="text-xs leading-[1.9] text-ink/70"
+                className="text-xs leading-[1.9] text-ink/70 whitespace-pre-wrap break-words"
                 style={{
                   fontFamily:
                     "var(--font-mono, 'JetBrains Mono', 'Fira Code', ui-monospace, monospace)",
                   margin: 0,
+                  overflowWrap: "break-word",
+                  wordBreak: "break-all",
                 }}
               >
                 <span className="text-navy font-semibold">bake deploy</span>
@@ -134,7 +136,7 @@ export default function Footer() {
                 {"\n"}
                 <span className="text-ink/50">Recipe Book:</span>
                 {"\n"}
-                <span className="text-ink/50 break-all">
+                <span className="text-ink/50">
                   {RECIPE_BOOK_ID}
                 </span>
               </pre>
@@ -162,13 +164,13 @@ export default function Footer() {
 
       {/* ── Bottom meta bar ── */}
       <div className="w-full border-t border-navy/8">
-        <div className="mx-auto max-w-6xl px-6 py-5 flex flex-col sm:flex-row items-center justify-between gap-3">
-          <p className="font-body text-xs text-ink/45 text-center sm:text-left">
+        <div className="mx-auto max-w-6xl px-4 sm:px-6 py-5 flex flex-col sm:flex-row items-center justify-between gap-3">
+          <p className="font-body text-[11px] sm:text-xs text-ink/45 text-center sm:text-left">
             Built for Cookie Chain · companion to bake · read-only · public on-chain data
           </p>
-          <p className="font-body text-xs text-ink/35">
+          <p className="font-body text-[11px] sm:text-xs text-ink/35 whitespace-nowrap">
             Recipe Book:{" "}
-            <code className="font-mono text-xs text-ink/50">
+            <code className="font-mono text-[11px] sm:text-xs text-ink/50">
               {RECIPE_BOOK_ID.slice(0, 6)}…{RECIPE_BOOK_ID.slice(-4)}
             </code>
           </p>
@@ -256,9 +258,9 @@ function FooterInstallPill() {
   }, []);
 
   return (
-    <div className="flex items-center gap-2 w-full max-w-full overflow-hidden">
+    <div className="flex items-center gap-2 w-full max-w-full">
       <div
-        className="inline-flex items-center gap-2 rounded-pill border-[2.5px] border-navy bg-gold py-1.5 pl-4 pr-1.5 flex-1 min-w-0"
+        className="inline-flex items-center gap-2 rounded-pill border-[2.5px] border-navy bg-gold py-1.5 pl-3 sm:pl-4 pr-1.5 flex-1 min-w-0 overflow-hidden"
         style={{
           boxShadow:
             "0 3px 0 0 rgba(11, 31, 58, 0.7), inset 0 1.5px 0 rgba(255, 255, 255, 0.55)",
@@ -266,7 +268,7 @@ function FooterInstallPill() {
       >
         <code
           ref={codeRef}
-          className="select-all whitespace-nowrap font-mono text-xs font-semibold text-navy min-w-0 truncate"
+          className="select-all whitespace-nowrap font-mono text-[10px] sm:text-xs font-semibold text-navy min-w-0 truncate"
         >
           {INSTALL_COMMAND}
         </code>

@@ -209,6 +209,17 @@ body {
   background-color: #0b1f3a !important;
   color: #fff !important;
 }
+
+/* Mobile: shrink wallet button */
+@media (max-width: 639px) {
+  .wallet-adapter-button {
+    font-size: 0.75rem !important;
+    padding: 0.4rem 0.75rem !important;
+  }
+  #wallet-connect-area .wallet-adapter-dropdown {
+    position: relative;
+  }
+}
 .wallet-adapter-modal-wrapper {
   border-radius: 1.75rem !important;
   border: 3px solid rgba(11, 31, 58, 0.9) !important;
@@ -248,4 +259,42 @@ body {
 .terminal-cursor {
   background: #0B1F3A;
   animation: cursor-blink 1s step-end infinite;
+}
+
+/* ── Mobile & tablet optimizations ── */
+@media (max-width: 768px) {
+  /* Reduce card shadows on mobile for performance */
+  .card-chunky {
+    box-shadow:
+      0 4px 0 0 rgba(11, 31, 58, 0.78),
+      0 8px 24px rgba(11, 31, 58, 0.12),
+      inset 0 2px 0 rgba(255, 255, 255, 0.9);
+  }
+
+  .card-chunky-sm {
+    box-shadow:
+      0 2px 0 0 rgba(11, 31, 58, 0.65),
+      0 6px 16px rgba(11, 31, 58, 0.1),
+      inset 0 1px 0 rgba(255, 255, 255, 0.85);
+  }
+
+  /* Wallet adapter modal full-width on mobile */
+  .wallet-adapter-modal-wrapper {
+    max-width: calc(100vw - 2rem) !important;
+    margin: 1rem !important;
+  }
+
+  /* Ensure buttons don't overflow on small screens */
+  .btn-gold, .btn-navy, .btn-cream {
+    padding: 0.625rem 1.25rem;
+    font-size: 0.875rem;
+  }
+}
+
+/* Small phones */
+@media (max-width: 380px) {
+  .btn-gold, .btn-navy, .btn-cream {
+    padding: 0.5rem 1rem;
+    font-size: 0.8125rem;
+  }
 }

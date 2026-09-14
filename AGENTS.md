@@ -63,12 +63,24 @@ The "live status strip" (does the on-chain program match its Recipe Book
 head?) requires comparing on-chain ProgramData bytes against a recorded
 hash. This exact computation (skip the ProgramData account's header,
 correctly parse the ELF64 header to determine exact binary length, hash
-with sha256) was hard-won in the CLI — it went through two real bugs
-(wrong header byte count, then a flawed trailing-zero-stripping heuristic)
-before landing on the correct approach. Port that exact logic from the
-CLI's `src/lib/deployPipeline.ts` (`fetchOnChainBytecodeHash`) — do not
-reimplement a simpler/shallower version (e.g. "is the account executable"
-is NOT the same claim as "bytecode matches the recorded hash").
+with sha256) was hard-won in the CLI — it went through three real bugs
+before landing on the correct approach:
+
+1. Wrong ProgramData header byte count
+2. Flawed trailing-zero-stripping heuristic
+3. **Incorrectly computing ELF size by iterating section headers and
+   taking `max(sh_offset + sh_size)`** — this excluded the section header
+   table itself (which lives at the end of the ELF, after all program
+   sections), producing a hash mismatch against the CLI's reference hash.
+   The fix: use `e_shoff + e_shentsize * e_shnum` instead, which exactly
+   accounts for the full ELF binary including the SHT.
+
+Port that exact logic from the CLI's `src/lib/deployPipeline.ts`
+(`fetchOnChainBytecodeHash`) — do not reimplement a simpler/shallower
+version (e.g. "is the account executable" is NOT the same claim as
+"bytecode matches the recorded hash"). The formula must remain
+`e_shoff + e_shentsize * e_shnum` — do NOT substitute a section-iteration
+heuristic.
 
 ---
 

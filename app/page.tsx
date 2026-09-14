@@ -92,7 +92,7 @@ const FEATURES = [
 ───────────────────────────────────────────────────────────────── */
 export default function HomePage() {
   return (
-    <div className="flex flex-col items-center gap-24 pb-28">
+    <div className="flex flex-col items-center gap-16 sm:gap-24 pb-16 sm:pb-28">
 
       {/* ══════════════════════════════════════════════════════════
           HERO — full-bleed sky panel, centered max-w-6xl container,
@@ -125,7 +125,7 @@ export default function HomePage() {
         />
 
         {/* Inner container — always centered */}
-        <div className="relative z-10 mx-auto w-full max-w-6xl px-5 py-16 sm:px-8 lg:py-24">
+        <div className="relative z-10 mx-auto w-full max-w-6xl px-4 py-10 sm:px-8 sm:py-16 lg:py-24">
 
           {/* Badge — own line, clearly above card */}
           <div className="mb-5 flex justify-center lg:justify-start">
@@ -144,10 +144,10 @@ export default function HomePage() {
             className="card-chunky grid w-full grid-cols-1 overflow-hidden lg:grid-cols-[1fr_300px]"
           >
             {/* LEFT: text */}
-            <div className="flex flex-col gap-6 px-8 py-11 sm:px-12 sm:py-12">
+            <div className="flex flex-col gap-5 sm:gap-6 px-5 py-8 sm:px-8 sm:py-11 lg:px-12 lg:py-12">
               <h1
                 id="hero-headline"
-                className="font-display text-[2.6rem] font-extrabold leading-[1.02] tracking-[-0.035em] text-navy sm:text-5xl xl:text-6xl"
+                className="font-display text-3xl font-extrabold leading-[1.05] tracking-[-0.035em] text-navy sm:text-[2.6rem] sm:leading-[1.02] lg:text-5xl xl:text-6xl"
               >
                 Ship on Cookie Chain.{" "}
                 <br className="hidden sm:block" />
@@ -170,13 +170,13 @@ export default function HomePage() {
               </div>
 
               {/* Hint line */}
-              <p className="font-body text-sm text-navy/65">
+              <p className="font-body text-xs sm:text-sm text-navy/65 leading-relaxed">
                 Then:{" "}
-                <code className="rounded bg-navy/10 px-1.5 py-0.5 font-mono text-xs text-navy">bake deploy</code>
+                <code className="rounded bg-navy/10 px-1 sm:px-1.5 py-0.5 font-mono text-[11px] sm:text-xs text-navy">bake deploy</code>
                 {" · "}
-                <code className="rounded bg-navy/10 px-1.5 py-0.5 font-mono text-xs text-navy">bake rollback</code>
+                <code className="rounded bg-navy/10 px-1 sm:px-1.5 py-0.5 font-mono text-[11px] sm:text-xs text-navy">bake rollback</code>
                 {" · "}
-                <code className="rounded bg-navy/10 px-1.5 py-0.5 font-mono text-xs text-navy">bake logs</code>
+                <code className="rounded bg-navy/10 px-1 sm:px-1.5 py-0.5 font-mono text-[11px] sm:text-xs text-navy">bake logs</code>
               </p>
 
               <div className="pt-1">
@@ -211,10 +211,10 @@ export default function HomePage() {
           </div>
 
           {/* Program address — subtle, below card */}
-          <div className="mt-4 flex justify-center">
-            <span className="font-body text-xs text-navy/50">
+          <div className="mt-4 flex justify-center px-4">
+            <span className="font-body text-[11px] sm:text-xs text-navy/50 text-center break-all">
               Recipe Book:{" "}
-              <code className="font-mono text-xs text-navy/60">
+              <code className="font-mono text-[11px] sm:text-xs text-navy/60">
                 56Vj61zFW4hHV6wdjnisrHtVwWDqyjixjpBgnoRJvzxL
               </code>
             </span>
@@ -228,7 +228,7 @@ export default function HomePage() {
       <section
         id="features"
         aria-labelledby="features-heading"
-        className="w-full max-w-6xl px-5"
+        className="w-full max-w-6xl px-4 sm:px-5"
       >
         <div className="mb-10 flex flex-col items-center gap-2 text-center">
           <h2
@@ -248,7 +248,7 @@ export default function HomePage() {
             <article
               key={f.id}
               id={f.id}
-              className="card-chunky flex flex-col gap-4 p-8 sm:p-10"
+              className="card-chunky flex flex-col gap-4 p-5 sm:p-8 lg:p-10"
             >
               {/* Icon + eyebrow row */}
               <div className="flex items-center gap-3">
@@ -287,7 +287,7 @@ export default function HomePage() {
       <section
         id="stats-strip"
         aria-label="Key stats"
-        className="w-full max-w-6xl px-5"
+        className="w-full max-w-6xl px-4 sm:px-5"
       >
         {/* Divider label */}
         <div className="mb-8 flex items-center gap-4">
@@ -306,7 +306,7 @@ export default function HomePage() {
           ].map((stat) => (
             <div
               key={stat.label}
-              className="card-chunky flex flex-col gap-1 px-8 py-7"
+              className="card-chunky flex flex-col gap-1 px-5 py-5 sm:px-8 sm:py-7"
             >
               <span className="font-display text-4xl font-extrabold leading-none text-navy">
                 {stat.value}

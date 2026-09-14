@@ -1,5 +1,5 @@
 /**
- * TypeScript types derived from the Recipe Book IDL.
+ * TypeScript types and PDA helpers for the Recipe Book program.
  * Program address: 56Vj61zFW4hHV6wdjnisrHtVwWDqyjixjpBgnoRJvzxL
  *
  * These mirror the on-chain account layouts exactly — do NOT modify
@@ -11,6 +11,18 @@ import { PublicKey } from "@solana/web3.js";
 export const RECIPE_BOOK_PROGRAM_ID =
   process.env.NEXT_PUBLIC_RECIPE_BOOK_PROGRAM_ID ??
   "56Vj61zFW4hHV6wdjnisrHtVwWDqyjixjpBgnoRJvzxL";
+
+/**
+ * 8-byte account discriminators from the IDL.
+ * Anchor derives these as sha256("account:<Name>")[..8].
+ */
+export const RECIPE_BOOK_DISCRIMINATOR = Buffer.from([
+  214, 37, 118, 236, 37, 167, 238, 193,
+]);
+
+export const ENTRY_DISCRIMINATOR = Buffer.from([
+  63, 18, 152, 113, 215, 246, 221, 250,
+]);
 
 /** Seeds: ["recipe_book", target_program_id] */
 export interface RecipeBookAccount {
@@ -44,10 +56,10 @@ export interface EntryAccount {
  * Derive the RecipeBook PDA for a given target program.
  * Matches the IDL seed: ["recipe_book", target_program_id]
  */
-export async function findRecipeBookPDA(
+export function findRecipeBookPDA(
   targetProgramId: PublicKey,
   programId: PublicKey
-): Promise<[PublicKey, number]> {
+): [PublicKey, number] {
   return PublicKey.findProgramAddressSync(
     [Buffer.from("recipe_book"), targetProgramId.toBuffer()],
     programId
@@ -56,13 +68,13 @@ export async function findRecipeBookPDA(
 
 /**
  * Derive an Entry PDA for a given RecipeBook and entry index.
- * Matches the IDL seed: ["entry", recipe_book, entry_count (u64 le)]
+ * Matches the IDL seed: ["entry", recipe_book, entry_index (u64 le)]
  */
-export async function findEntryPDA(
+export function findEntryPDA(
   recipeBookPubkey: PublicKey,
   index: bigint,
   programId: PublicKey
-): Promise<[PublicKey, number]> {
+): [PublicKey, number] {
   const indexBuf = Buffer.alloc(8);
   indexBuf.writeBigUInt64LE(index);
   return PublicKey.findProgramAddressSync(
