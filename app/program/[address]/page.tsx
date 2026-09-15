@@ -250,10 +250,10 @@ export default async function ProgramPage({ params }: Props) {
 
                           {/* Copy-paste command buttons */}
                           <div className="flex flex-wrap gap-2 pt-2 border-t border-navy/8">
-                            <CopyCommandButton command={`bake rollback --to ${entry.index}`} label="rollback" />
-                            <CopyCommandButton command={`bake logs --program ${address}`} label="logs" />
+                            <CopyCommandButton command={`bake rollback ${entry.index} --program ${address}`} label="rollback" />
+                            <CopyCommandButton command={`bake logs ${address}`} label="logs" />
                             <CopyCommandButton command={`bake stats ${address}`} label="stats" />
-                            <CopyCommandButton command={`bake prove ${address}`} label="prove" />
+                            <CopyCommandButton command={`bake prove ${entry.index} --program ${address}`} label="prove" />
                           </div>
                         </div>
                       </div>
