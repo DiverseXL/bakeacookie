@@ -8,34 +8,21 @@ description: Open the bakeacookie web dashboard from the CLI.
 The `bake dashboard` command opens the [bakeacookie web dashboard](https://bakeacookie.vercel.app) in your default browser.
 
 ```bash
-bake dashboard                            # opens /wallet/<your-address>
+bake dashboard                            # opens the homepage
 bake dashboard <programId>                # opens /program/<programId>
-bake dashboard <address> --wallet         # opens /wallet/<address>
 bake dashboard --ci <programId>           # prints URL instead of opening browser
 ```
 
 ### No arguments
 
-When called without an address, `bake dashboard` resolves your local wallet's public key (the same logic `bake whoami` uses) and opens your wallet page:
-
-```
-/wallet/<your-public-key>
-```
-
-This shows every program you've deployed to via the Recipe Book.
+When called without an address, `bake dashboard` opens the dashboard homepage.
 
 ### With an address
 
-By default, an explicit address opens the **program** view:
+An explicit address opens the **program** view:
 
 ```
 /program/<address>
-```
-
-Add `--wallet` to force the **wallet** view instead:
-
-```
-/wallet/<address>
 ```
 
 ## CI mode
@@ -68,10 +55,6 @@ BAKE_DASHBOARD_URL=http://localhost:3000 bake dashboard
 ```
 
 ## Troubleshooting
-
-### "No local wallet found"
-
-Run `bake login` first to create or link a wallet. Without a local wallet, `bake dashboard` (no argument) cannot resolve your address.
 
 ### Browser doesn't open
 

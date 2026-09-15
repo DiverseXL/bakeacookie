@@ -193,10 +193,9 @@ real dev tool, not just a meme site.
   state, not an error)
 - The CLI command `bake dashboard [address]` opens this site directly in
   the browser (live at https://bakeacookie.vercel.app). `bake dashboard`
-  (no arg) opens the user's own wallet page; `bake dashboard <addr>` opens
-  `/program/<addr>`; `bake dashboard <addr> --wallet` opens `/wallet/<addr>`;
-  `--ci` prints the URL instead of launching a browser. The base URL is
-  overridable via `BAKE_DASHBOARD_URL` env var
+  (no arg) opens the homepage; `bake dashboard <addr>` opens
+  `/program/<addr>`; `--ci` prints the URL instead of launching a browser.
+  The base URL is overridable via `BAKE_DASHBOARD_URL` env var
 
 ---
 

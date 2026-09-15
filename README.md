@@ -71,9 +71,8 @@ Nightly, Phantom, Backpack, and any other Wallet Standard-compliant wallet auto-
 The `bake dashboard` command opens this site in your default browser:
 
 ```bash
-bake dashboard                            # opens /wallet/<your-address>
+bake dashboard                            # opens the homepage
 bake dashboard <programId>                # opens /program/<programId>
-bake dashboard <address> --wallet         # opens /wallet/<address>
 bake dashboard --ci <programId>           # prints URL instead of opening browser
 ```
 

@@ -18,14 +18,6 @@ This shows:
 - Live status strip (bytecode verification)
 - Copy-paste `bake` commands per entry
 
-## Wallet page
-
-```
-https://bakeacookie.vercel.app/wallet/<address>
-```
-
-Shows all programs a wallet has deployed to (Recipe Book entries where `deployer === address`).
-
 ## Dashboard features
 
 The [bakeacookie dashboard](https://bakeacookie.vercel.app) is a read-only explorer:
@@ -39,9 +31,8 @@ The [bakeacookie dashboard](https://bakeacookie.vercel.app) is a read-only explo
 The CLI automatically prints dashboard links after successful deploys. You can also open the dashboard directly:
 
 ```bash
-bake dashboard                            # opens /wallet/<your-address>
+bake dashboard                            # opens the homepage
 bake dashboard <programId>                # opens /program/<programId>
-bake dashboard <address> --wallet         # opens /wallet/<address>
 bake dashboard --ci <programId>           # prints URL instead of opening browser
 ```
 
