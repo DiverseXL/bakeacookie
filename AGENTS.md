@@ -191,9 +191,12 @@ real dev tool, not just a meme site.
   `/program/<address>` here — that link must always resolve cleanly, even
   for a program with zero prior Recipe entries (show a "no history yet"
   state, not an error)
-- A future CLI command, `bake dashboard [address]`, will open this site
-  directly in the browser — not built yet, queued until this dashboard has
-  a real deployed URL
+- The CLI command `bake dashboard [address]` opens this site directly in
+  the browser (live at https://bakeacookie.vercel.app). `bake dashboard`
+  (no arg) opens the user's own wallet page; `bake dashboard <addr>` opens
+  `/program/<addr>`; `bake dashboard <addr> --wallet` opens `/wallet/<addr>`;
+  `--ci` prints the URL instead of launching a browser. The base URL is
+  overridable via `BAKE_DASHBOARD_URL` env var
 
 ---
 

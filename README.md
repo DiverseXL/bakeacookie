@@ -65,3 +65,16 @@ Accounts:
 ## Wallet connection
 
 Nightly, Phantom, Backpack, and any other Wallet Standard-compliant wallet auto-detect without a dedicated adapter. The connect button in the nav shows the truncated address once connected.
+
+## CLI integration
+
+The `bake dashboard` command opens this site in your default browser:
+
+```bash
+bake dashboard                            # opens /wallet/<your-address>
+bake dashboard <programId>                # opens /program/<programId>
+bake dashboard <address> --wallet         # opens /wallet/<address>
+bake dashboard --ci <programId>           # prints URL instead of opening browser
+```
+
+After a successful `bake deploy`, the CLI also prints a dashboard link to the deployed program's page. The base URL is overridable via `BAKE_DASHBOARD_URL` env var.
