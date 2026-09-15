@@ -1,0 +1,78 @@
+---
+title: Dashboard
+description: Open the bakeacookie web dashboard from the CLI.
+---
+
+## Opening the dashboard
+
+The `bake dashboard` command opens the [bakeacookie web dashboard](https://bakeacookie.vercel.app) in your default browser.
+
+```bash
+bake dashboard                            # opens /wallet/<your-address>
+bake dashboard <programId>                # opens /program/<programId>
+bake dashboard <address> --wallet         # opens /wallet/<address>
+bake dashboard --ci <programId>           # prints URL instead of opening browser
+```
+
+### No arguments
+
+When called without an address, `bake dashboard` resolves your local wallet's public key (the same logic `bake whoami` uses) and opens your wallet page:
+
+```
+/wallet/<your-public-key>
+```
+
+This shows every program you've deployed to via the Recipe Book.
+
+### With an address
+
+By default, an explicit address opens the **program** view:
+
+```
+/program/<address>
+```
+
+Add `--wallet` to force the **wallet** view instead:
+
+```
+/wallet/<address>
+```
+
+## CI mode
+
+In `--ci` mode, the URL is printed to stdout instead of launching a browser:
+
+```bash
+bake dashboard --ci 56Vj61zFW4hHV6wdjnisrHtVwWDqyjixjpBgnoRJvzxL
+# prints: https://bakeacookie.vercel.app/program/56Vj61zFW4hHV6wdjnisrHtVwWDqyjixjpBgnoRJvzxL
+```
+
+This is useful for scripting and CI/CD pipelines.
+
+## Deploy success link
+
+After a successful `bake deploy`, the CLI also prints a dashboard link in the success output:
+
+```
+  Dashboard:  https://bakeacookie.vercel.app/program/<deployed-address>
+```
+
+This line is skipped in `--ci` and `--json` modes.
+
+## Custom dashboard URL
+
+Set the `BAKE_DASHBOARD_URL` environment variable to override the default base URL. This is useful for local dashboard development or testing:
+
+```bash
+BAKE_DASHBOARD_URL=http://localhost:3000 bake dashboard
+```
+
+## Troubleshooting
+
+### "No local wallet found"
+
+Run `bake login` first to create or link a wallet. Without a local wallet, `bake dashboard` (no argument) cannot resolve your address.
+
+### Browser doesn't open
+
+The command uses `open` (macOS), `start` (Windows), or `xdg-open` (Linux) to launch the browser. If the browser doesn't open, the URL is printed to the terminal so you can visit it manually.

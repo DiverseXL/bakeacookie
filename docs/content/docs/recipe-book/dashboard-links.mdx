@@ -36,6 +36,13 @@ The [bakeacookie dashboard](https://bakeacookie.dev) is a read-only explorer:
 
 ## Integration
 
-The CLI automatically prints dashboard links after successful deploys. No configuration needed.
+The CLI automatically prints dashboard links after successful deploys. You can also open the dashboard directly:
 
-See the [bakeacookie docs](https://bakeacookie.dev/docs) for dashboard-specific documentation.
+```bash
+bake dashboard                            # opens /wallet/<your-address>
+bake dashboard <programId>                # opens /program/<programId>
+bake dashboard <address> --wallet         # opens /wallet/<address>
+bake dashboard --ci <programId>           # prints URL instead of opening browser
+```
+
+See the [Dashboard guide](/docs/guides/dashboard) for full details.

@@ -145,6 +145,19 @@ Environment health check.
 bake doctor
 ```
 
+### bake dashboard
+
+Open the web dashboard in your browser.
+
+```bash
+bake dashboard                            # opens /wallet/<your-address>
+bake dashboard <programId>                # opens /program/<programId>
+bake dashboard <address> --wallet         # opens /wallet/<address>
+bake dashboard --ci <programId>           # prints URL instead of opening browser
+```
+
+See the [Dashboard guide](/docs/guides/dashboard) for full details.
+
 ### bake mcp
 
 Start MCP server for AI agents.

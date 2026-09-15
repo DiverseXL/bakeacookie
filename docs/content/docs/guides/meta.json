@@ -9,6 +9,7 @@
     "audit",
     "fork",
     "diff-decode",
+    "dashboard",
     "ci",
     "mcp"
   ]
