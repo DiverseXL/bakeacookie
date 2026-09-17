@@ -117,7 +117,7 @@ export default async function ProgramPage({ params }: Props) {
           <a href={`https://explorer.solana.com/address/${address}?cluster=devnet`} target="_blank" rel="noopener noreferrer" className="btn-cream text-xs">
             <ExternalIcon /> Solana Explorer
           </a>
-          <a href={`https://cookiescan.io/account/${address}`} target="_blank" rel="noopener noreferrer" className="btn-navy text-xs">
+          <a href={`https://cookiescan.io/address/${address}`} target="_blank" rel="noopener noreferrer" className="btn-navy text-xs">
             <ExternalIcon /> CookieScan
           </a>
         </div>

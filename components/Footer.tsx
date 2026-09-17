@@ -89,7 +89,7 @@ export default function Footer() {
               Cookie Chain docs
             </FooterLink>
             <FooterLink
-              href="https://cookiescan.io/account/56Vj61zFW4hHV6wdjnisrHtVwWDqyjixjpBgnoRJvzxL"
+              href="https://cookiescan.io/address/56Vj61zFW4hHV6wdjnisrHtVwWDqyjixjpBgnoRJvzxL"
               external
             >
               Recipe Book on CookieScan
