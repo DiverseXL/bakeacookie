@@ -3,11 +3,37 @@ title: Networks & Clusters
 description: Switch between Cookie Chain, Solana mainnet, devnet, and local validators.
 ---
 
-## Cluster switching
+## Deploying to other SVM chains
+
+bake isn't locked to Cookie Chain — since it's built on standard Solana/Anchor tooling, it works against any SVM-compatible chain.
+
+### Switch clusters
 
 ```bash
-bake use <cluster|url>
+bake use cookie       # Cookie Chain (default)
+bake use devnet       # Solana devnet
+bake use mainnet      # Solana mainnet
+bake use https://your-custom-rpc.example.com  # any custom RPC
 ```
+
+Everything — `bake deploy`, `bake rollback`, `bake logs`, `bake stats`, `bake prove` — works identically regardless of which cluster is active. This has been tested end-to-end against Solana devnet with zero code changes required.
+
+### Per-command targeting
+
+Point specific commands at a different program without switching your active cluster:
+
+```bash
+bake prove --program <address>
+bake rollback --program <address>
+```
+
+### Check your current cluster
+
+```bash
+bake whoami
+```
+
+Shows your active wallet(s) and the current cluster. You can also run `bake doctor` for a full diagnostic check.
 
 ### Built-in presets
 
@@ -33,14 +59,6 @@ bake use http://localhost:8899
 
 Point at a local `solana-test-validator` instance.
 
-## Check current cluster
-
-```bash
-bake whoami
-```
-
-Shows your active wallet(s) and the current cluster.
-
 ## Cookie Chain specifics
 
 Cookie Chain is a fast, cheap, community-owned SVM blockchain:
@@ -49,10 +67,6 @@ Cookie Chain is a fast, cheap, community-owned SVM blockchain:
 - **RPC**: `https://rpc.cookiescan.io` (default)
 
 bake is designed around Cookie Chain's economics — rollbacks cost cents, permanent on-chain history is practical.
-
-## Multi-cluster support
-
-bake's architecture is chain-agnostic. The full pipeline (deploy, prove, logs, stats) has been tested end-to-end on Solana devnet with zero code changes. Cookie Chain remains the primary, flagship target.
 
 ## Configuration
 
