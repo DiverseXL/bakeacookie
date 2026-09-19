@@ -159,9 +159,70 @@ See the [Dashboard guide](/docs/guides/dashboard) for full details.
 
 ### bake mcp
 
-Start MCP server for AI agents.
+Start MCP server for AI agents (stdio).
 
 ```bash
-bake mcp                      # Read-only mode
-bake mcp --policy policy.json # With write access
+bake mcp                      # Read-only mode (default)
+bake mcp --policy policy.json # With custom policy / write permissions
 ```
+
+See the [MCP guide](/docs/guides/mcp) for policy details and confirmation flows.
+
+### bake agent init
+
+Scaffold a new autonomous AI agent workspace pre-wired with safe bake MCP configs and prompt templates.
+
+```bash
+bake agent init <projectName>     # Scaffold agent repository
+```
+
+Generates:
+- `policy.example.json` (defaults to `allowWrites: false`)
+- `prompts/system.md` (toolchain and environment constraints)
+- `mcp/mcp.json` (Cursor & Claude Desktop configuration)
+- `README.md` and `package.json`
+
+See the [AI Agents guide](/docs/guides/agents) for setup instructions.
+
+### bake session
+
+Manage ephemeral local sandboxes for zero-risk deployment rehearsals.
+
+```bash
+# Start a new local sandbox (boots validator + ephemeral wallet)
+bake session open [options]
+
+# Check active session status (RPC, wallet, balance)
+bake session status
+
+# Deploy current project to active session
+bake session deploy
+
+# Close session and cleanup temporary files
+bake session close [-y|--yes]
+```
+
+**`bake session open` options:**
+| Flag | Description |
+|------|-------------|
+| `--no-validator` | Do not start a local validator |
+| `--port <port>` | Port for local validator RPC (default: `8899`) |
+| `--workspace <path>` | Custom directory for session data |
+| `--force` | Terminate existing active session and open fresh |
+
+**`bake session close` options:**
+| Flag | Description |
+|------|-------------|
+| `-y`, `--yes` | Skip interactive teardown confirmation |
+
+See the [Sessions guide](/docs/guides/sessions) for workflow details.
+
+### bake top
+
+View network and program leaderboards.
+
+```bash
+bake top
+```
+
+> **Note:** `bake top` is currently a placeholder and is **not yet implemented**. Full network-wide leaderboards require chain-wide indexing infrastructure that is planned for a future release.

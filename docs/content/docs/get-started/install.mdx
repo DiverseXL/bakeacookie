@@ -43,10 +43,15 @@ Not every command needs the full toolchain:
 | Command | Requirements |
 |---------|--------------|
 | `bake login`, `bake use`, `bake whoami` | Node.js only |
-| `bake stats`, `bake logs`, `bake decode` | Node.js + network |
-| `bake init`, `bake deploy`, `bake rollback` | Node.js + Rust + Solana CLI + Anchor |
+| `bake agent init` | Node.js only |
+| `bake stats`, `bake logs`, `bake decode`, `bake mcp` | Node.js + network |
+| `bake init`, `bake deploy`, `bake rollback`, `bake session` | Node.js + Rust + Solana CLI + Anchor |
 | `bake audit` | All above + Radar + Docker |
 | `bake fork` | Node.js + Solana CLI |
+
+Building an AI agent? Scaffold your workspace with `bake agent init` (see the [AI Agents Guide](/docs/guides/agents)).
+
+Practicing deploys locally? Use disposable sandboxes with `bake session` (see the [Sessions Guide](/docs/guides/sessions)).
 
 See [Requirements](/docs/get-started/requirements) for the full breakdown.
 

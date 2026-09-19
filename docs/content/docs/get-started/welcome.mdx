@@ -14,10 +14,10 @@ bake --help
 
 ## Who is bake for?
 
-- **Cookie Chain developers** who want a better deploy experience than raw `solana deploy`
-- **Teams** who need on-chain deploy history for compliance or debugging
-- **AI agents** who need to deploy programs via MCP (Model Context Protocol)
-- **Security-conscious developers** who want audit-gated deploys via Radar
+- **Cookie Chain developers** who want a fast, zero-friction deploy experience without wrestling raw `solana deploy` flags
+- **Teams** who need a permanent on-chain deploy history and verifiable build hashes for compliance and incident response
+- **AI agents & agent builders** using `bake agent init` to scaffold agent projects pre-configured with safe, read-only MCP tooling (`bake mcp`)
+- **Security-conscious developers** who want automated static analysis and audit-gated deploys via Radar
 
 ## 30-second pitch
 
@@ -30,12 +30,17 @@ Cookie Chain's economics make things possible that are impractical anywhere else
 | On-chain deploy history | ✅ Recipe Book | ❌ |
 | One-command rollback | ✅ `bake rollback` | ❌ Manual re-deploy |
 | Cryptographic proof | ✅ `bake prove` | ❌ |
+| Local disposable workspaces | ✅ `bake session` | ❌ Manual test validator |
+| Agent scaffolding & MCP | ✅ `bake agent init` & `bake mcp` | ❌ |
 | Windows support | ✅ Auto-WSL relay | ❌ |
-| AI agent support | ✅ `bake mcp` | ❌ |
 | Security audit gate | ✅ `bake deploy --require-audit` | ❌ |
 
 ## Next steps
 
-- **[Install](/docs/get-started/install)** — get bake on your machine
+- **[Install](/docs/get-started/install)** — get bake on macOS, Linux, or Windows (WSL)
 - **[Quickstart](/docs/get-started/quickstart)** — deploy your first program in 60 seconds
-- **[First Deploy](/docs/get-started/first-deploy)** — step-by-step walkthrough
+- **[First Deploy](/docs/get-started/first-deploy)** — step-by-step walkthrough from scratch
+- **[AI Agents](/docs/guides/agents)** — scaffold agent projects with `bake agent init`
+- **[Sessions](/docs/guides/sessions)** — sandbox and rehearse deploys with `bake session`
+- **[Recipe Book](/docs/recipe-book/overview)** — understand the on-chain deploy ledger
+

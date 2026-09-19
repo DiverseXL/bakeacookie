@@ -11,6 +11,8 @@
     "diff-decode",
     "dashboard",
     "ci",
-    "mcp"
+    "mcp",
+    "agents",
+    "sessions"
   ]
 }

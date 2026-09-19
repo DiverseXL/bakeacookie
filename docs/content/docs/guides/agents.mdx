@@ -1,0 +1,129 @@
+---
+title: AI Agents (bake agent init)
+description: Scaffold autonomous AI agent projects pre-wired with safe, read-only bake MCP tooling.
+---
+
+## Overview
+
+Scaffold a complete AI agent project with pre-configured Model Context Protocol (MCP) integrations and secure defaults.
+
+`bake agent init` creates a production-ready starter workspace designed for AI coding agents (such as Cursor, Claude Desktop, or custom agent runtimes) that interact with Cookie Chain and Solana programs via bake.
+
+## Prerequisites
+
+- Node.js ≥ 18 (Node.js ≥ 22 recommended if using optional `cookie-mcp` tools)
+- `bakeacookie` installed globally:
+  ```bash
+  npm install -g bakeacookie
+  ```
+
+## Quick start
+
+```bash
+# 1. Scaffold your agent project
+bake agent init my-agent
+
+# 2. Enter project directory
+cd my-agent
+
+# 3. Install dependencies
+npm install
+```
+
+## Generated project structure
+
+`bake agent init` generates a structured repository with safety guards, system prompts, and client connection configs:
+
+```text
+my-agent/
+├── README.md               # Project guide and agent workflow instructions
+├── package.json            # Dependencies and helper scripts
+├── policy.example.json     # Pre-configured bake MCP policy template (read-only by default)
+├── prompts/
+│   └── system.md           # System prompt containing Cookie Chain & toolchain constraints
+└── mcp/
+    ├── mcp.json            # Ready-to-use client config for Cursor / Claude Desktop
+    └── README.md           # Instructions for connecting AI agent interfaces
+```
+
+### Key files explained
+
+| File | Purpose |
+|------|---------|
+| `prompts/system.md` | Injects crucial environment constraints (e.g. read-only defaults, Recipe Book architecture, Windows/WSL requirements) into your agent's context. |
+| `policy.example.json` | Sample policy restricting or granting MCP tool access. Default: `allowWrites: false`. |
+| `mcp/mcp.json` | JSON snippet you can paste directly into Claude Desktop or Cursor MCP settings. |
+
+## Safe by default (`allowWrites: false`)
+
+> **Warning:** Write operations (deploying programs, rolling back on-chain state) can consume funds and alter contract code. By default, all generated policy configurations set `"allowWrites": false`.
+
+In read-only mode, the agent has access to query and inspection tools only:
+- `bake_whoami` — inspect active wallet and cluster
+- `bake_stats` — query program invocation statistics
+- `bake_prove` — check on-chain bytecode against Recipe Book hashes
+- `bake_logs` — stream or inspect transaction logs
+- `bake_get_history` — list on-chain Recipe Book entries
+
+Write tools (`bake_deploy`, `bake_rollback`, `bake_confirm_action`) are **completely unregistered** from the MCP server until an explicit policy enables them.
+
+## Connecting AI clients (Cursor & Claude Desktop)
+
+The generated `mcp/mcp.json` file provides ready-to-copy configuration for your preferred AI workspace.
+
+### Claude Desktop configuration
+
+Add this block to your `claude_desktop_config.json`:
+
+```json
+{
+  "mcpServers": {
+    "bake": {
+      "command": "bake",
+      "args": ["mcp", "--policy", "./policy.example.json"]
+    }
+  }
+}
+```
+
+### Cursor configuration
+
+In Cursor Settings → Features → MCP:
+- **Name:** `bake`
+- **Type:** `command`
+- **Command:** `bake mcp --policy ./policy.example.json`
+
+> **Note on working directory & policy paths:** Always start your agent or configure the policy path relative to your project root. If you move directories or run from a global context, pass an absolute path to the policy file (e.g. `--policy /absolute/path/to/my-agent/policy.example.json`).
+
+## Optional `cookie-mcp` integration
+
+The scaffolded project is pre-configured to optionally integrate with `@cookiechain/cookie-mcp` for read-only market data and token liquidity lookups.
+
+> **Security rule:** Never paste private keys, seed phrases, or sensitive wallet secrets into chat prompts or agent system prompts. All transaction signing must go through local keypairs managed by `bake login` or explicit confirmation tokens.
+
+## Enabling writes & human confirmation
+
+To grant your agent permission to deploy or rollback programs:
+
+1. Copy `policy.example.json` to `.bake/mcp-policy.json` (or your chosen policy path) and set:
+   ```json
+   {
+     "allowWrites": true,
+     "allowedPrograms": "any",
+     "maxDeploysPerSession": 3,
+     "requireConfirmation": true
+   }
+   ```
+2. Keep `"requireConfirmation": true`. When an agent initiates a deploy, `bake mcp` generates a preview and returns a `confirmationToken`. The action is executed only when the token is confirmed.
+
+## Expected outcome
+
+After running `bake agent init my-agent` and linking `mcp/mcp.json` to your AI interface:
+- Your AI agent can query program status, inspect Recipe Book history, and run cryptographic verifications via stdio MCP.
+- The agent is constrained by your policy file and cannot execute unauthorised on-chain mutations.
+
+## Related links
+
+- **[MCP Guide](/docs/guides/mcp)** — deep dive into bake's MCP server architecture and tool schemas
+- **[Command Reference: agent init](/docs/reference/commands#bake-agent-init)** — CLI flags and options
+- **[Quickstart](/docs/get-started/quickstart)** — deploy an Anchor program with bake

@@ -1,6 +1,6 @@
 ---
 title: MCP for AI Agents
-description: Let AI agents deploy programs via Model Context Protocol.
+description: Let AI agents inspect and deploy programs via Model Context Protocol.
 ---
 
 ## Overview
@@ -9,13 +9,13 @@ description: Let AI agents deploy programs via Model Context Protocol.
 bake mcp
 ```
 
-`bake mcp` starts a local stdio-based MCP server that exposes bake's capabilities to AI agents. This is the one command that lets an agent trigger real on-chain writes.
+`bake mcp` starts a local stdio-based MCP server that exposes bake's capabilities to AI agents.
+
+To quickly scaffold a complete agent repository pre-configured for Cursor or Claude Desktop, see the **[AI Agents Guide (`bake agent init`)](/docs/guides/agents)**.
 
 ## Safety-first design
 
-<callout type="warning">
-Write tools are UNREGISTERED by default. An agent cannot be tricked into calling a tool it does not know exists.
-</callout>
+> **Warning:** Write tools are **UNREGISTERED by default**. An agent cannot be tricked into calling a tool it does not know exists.
 
 ### Two tiers of tools
 
@@ -84,18 +84,17 @@ Key constraints:
 ## Usage with AI agents
 
 ```bash
-# Start MCP server
+# Start MCP server in read-only mode
 bake mcp
 
 # Or with explicit policy
 bake mcp --policy .bake/mcp-policy.json
 ```
 
-Configure your AI agent to connect to bake's MCP server over stdio.
+Configure your AI agent (Cursor, Claude Desktop, etc.) to connect to bake's MCP server over stdio.
 
-## Implementation files
+## Related guides & references
 
-- `src/commands/mcp.ts` — command entrypoint
-- `src/lib/mcpServer.ts` — tool definitions and handlers
-- `src/lib/mcpPolicy.ts` — policy schema and loader
-- `src/lib/cookieMcpClient.ts` — cookie-mcp client
+- **[AI Agents Guide](/docs/guides/agents)** — scaffold a pre-configured agent project with `bake agent init`
+- **[Command Reference](/docs/reference/commands#bake-mcp)** — full flags and options for `bake mcp`
+

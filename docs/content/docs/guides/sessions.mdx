@@ -1,0 +1,116 @@
+---
+title: Sessions (bake session)
+description: Spin up disposable local development sandboxes for zero-risk deploy rehearsals.
+---
+
+## Overview
+
+Manage ephemeral, disposable local workspaces to practice and verify deployments before touching public networks.
+
+`bake session` provides a temporary sandbox with its own ephemeral wallet, local test validator, and isolated environment variables. When you are done testing, closing the session tears down the sandbox without modifying your permanent `bake use` cluster configuration.
+
+## Prerequisites
+
+- Solana CLI / Anchor toolchain installed locally (or available via WSL on Windows)
+- `bakeacookie` installed globally:
+  ```bash
+  npm install -g bakeacookie
+  ```
+
+## Typical session lifecycle
+
+```bash
+# 1. Open a new disposable sandbox
+bake session open
+
+# 2. Inspect active session details (RPC, wallet, balance)
+bake session status
+
+# 3. Build and deploy your Anchor program into the session
+cd my-program
+bake session deploy
+
+# 4. Tear down the sandbox and clean up temporary keys
+bake session close -y
+```
+
+## How sessions work
+
+### 1. Ephemeral keypairs & isolation
+When you run `bake session open`, bake generates an ephemeral keypair stored under `~/.bake/sessions/<session-id>/`. This wallet is funded locally (via best-effort local airdrop) and isolated from your personal mainnet keys.
+
+### 2. Process-local environment overrides
+Sessions set process-local environment variables (e.g. `ANCHOR_PROVIDER_URL`, session keypair path) for commands executed under the session. Your permanent cluster setting (e.g. `bake use cookie`) remains completely untouched after you close the session.
+
+> **Note:** `bake session` is **not** required for deploying directly to Cookie Chain mainnet. It is designed specifically for testing, script verification, and dry-run rehearsals.
+
+### 3. Identical deploy pipeline
+`bake session deploy` runs the **exact same** `runDeployPipeline` engine as `bake deploy` — compiling contracts with Anchor, hashing the ELF64 binary, and performing full pipeline checks — guaranteeing that your rehearsal matches production behavior.
+
+### 4. Single active session rule
+Only **one active session** may run at a time per machine. If you attempt to open a new session while one is active, bake prompts you to close the existing session or pass `--force` to overwrite it.
+
+## Commands and flags
+
+### `bake session open`
+
+Starts a new session, creates ephemeral credentials, and boots a local test validator (by default).
+
+```bash
+bake session open [options]
+```
+
+| Flag | Description |
+|------|-------------|
+| `--no-validator` | Skip launching a local `solana-test-validator` (e.g. if you already have an RPC running) |
+| `--port <port>` | Specify custom RPC port for the local validator (default: `8899`) |
+| `--workspace <path>` | Custom directory path for session artifacts |
+| `--force` | Force open a new session by tearing down any existing active session |
+
+### `bake session status`
+
+Prints active session metadata, including session ID, RPC URL, ephemeral wallet public key, and local balance.
+
+```bash
+bake session status
+```
+
+### `bake session deploy`
+
+Executes the standard bake deployment pipeline inside the active session against the local validator.
+
+```bash
+cd my-anchor-project
+bake session deploy
+```
+
+### `bake session close`
+
+Terminates the session's background validator, removes ephemeral keypairs and temporary state, and restores the standard environment.
+
+```bash
+bake session close
+bake session close -y    # Skip confirmation prompt
+```
+
+| Flag | Description |
+|------|-------------|
+| `-y`, `--yes` | Automatically confirm closure and cleanup without prompt |
+
+## Windows & WSL notes
+
+On Windows, `bake session` relays validator execution and compilation to WSL.
+- Do not run duplicate test validators simultaneously in both Windows and WSL.
+- If port `8899` is already bound by an orphaned process, pass `--port 8900` or kill the stale validator process before opening.
+
+## Expected outcome
+
+- You can build, deploy, and verify Anchor programs locally in seconds without paying gas fees or risking live funds.
+- Closing the session cleanly removes all temporary artifacts and returns your CLI to its configured cluster (`cookie`).
+
+## Related links
+
+- **[Deploy Guide](/docs/guides/deploy)** — understanding the production deploy pipeline
+- **[Fork Guide](/docs/guides/fork)** — cloning on-chain programs into local test environments
+- **[Command Reference: session](/docs/reference/commands#bake-session)** — full session CLI options
+- **[Troubleshooting](/docs/troubleshooting)** — resolving validator port conflicts

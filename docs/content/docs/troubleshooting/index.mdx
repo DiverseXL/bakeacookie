@@ -14,7 +14,9 @@ description: Known failure signatures and fixes.
 | `ANCHOR_PROVIDER_URL is not defined` despite `Anchor.toml` looking correct | Windows/WSL PATH interop — WSL silently invoked Windows-side Node.js | Check `which node` inside WSL; if `/mnt/c/...`, disable interop in `/etc/wsl.conf` |
 | `error[E0432]: unresolved import 'crate'` at `#[program]` macro | Anchor version mismatch (anchor-cli vs anchor-lang) | Confirm versions match in `Cargo.toml` and installed CLI |
 | `librustc_driver-*.so: cannot open shared object file` | Corrupted platform-tools cache | `rm -rf ~/.cache/solana/<version>`, let it redownload |
-| Deploy retries into a stale buffer | `anchor deploy` auto-resumes into leftover buffer | `solana program close <buffer-address>`, delete `*-upgrade-buffer.json`, redeploy fresh |
+| `Deploy retries into a stale buffer` | `anchor deploy` auto-resumes into leftover buffer | `solana program close <buffer-address>`, delete `*-upgrade-buffer.json`, redeploy fresh |
+| `Port 8899 is already in use` during `bake session open` | Stale background validator running or another service on 8899 | Close existing session with `bake session close -y`, pass `--port 8900`, or kill stale validator |
+| `No active session found` during `bake session deploy` | Attempting session deploy without opening a session first | Run `bake session open` to create a session, or use `bake deploy` to deploy to active cluster |
 
 ## Windows/WSL issues
 
